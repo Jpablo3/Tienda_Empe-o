@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ChevronDown, MapPin, User, ArrowRight, ArrowLeft, AlertCircle, CheckCircle } from 'lucide-react';
+import { ChevronDown, MapPin, User, ArrowRight, ArrowLeft, AlertCircle, CheckCircle, Eye, EyeOff } from 'lucide-react';
 import { ubicacionAPI } from '../api/ubicacionAPI';
 import { clienteAPI } from '../api/clienteAPI';
 import { tipoDocumentoAPI } from '../api/tipoDocumentoAPI';
@@ -14,6 +14,8 @@ const ClienteRegistroForm = () => {
   const [emailDisponible, setEmailDisponible] = useState(null);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   // Estados para los datos del formulario
   const [direccionData, setDireccionData] = useState({
@@ -721,14 +723,27 @@ const ClienteRegistroForm = () => {
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     Contraseña <span className="text-red-500">*</span>
                   </label>
-                  <input
-                    type="password"
-                    value={clienteData.password}
-                    onChange={(e) => handleClienteChange('password', e.target.value)}
-                    placeholder="Mínimo 6 caracteres"
-                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-                    minLength={6}
-                  />
+                  <div className="relative">
+                    <input
+                      type={showPassword ? "text" : "password"}
+                      value={clienteData.password}
+                      onChange={(e) => handleClienteChange('password', e.target.value)}
+                      placeholder="Mínimo 6 caracteres"
+                      className="w-full px-4 pr-12 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                      minLength={6}
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="absolute right-3 top-3 text-gray-400 hover:text-gray-600 focus:outline-none"
+                    >
+                      {showPassword ? (
+                        <EyeOff className="h-5 w-5" />
+                      ) : (
+                        <Eye className="h-5 w-5" />
+                      )}
+                    </button>
+                  </div>
                   {clienteData.password && clienteData.password.length < 6 && (
                     <p className="text-red-600 text-xs mt-1">La contraseña debe tener al menos 6 caracteres</p>
                   )}
@@ -739,16 +754,29 @@ const ClienteRegistroForm = () => {
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     Confirmar Contraseña <span className="text-red-500">*</span>
                   </label>
-                  <input
-                    type="password"
-                    value={clienteData.confirmPassword}
-                    onChange={(e) => handleClienteChange('confirmPassword', e.target.value)}
-                    placeholder="Repite tu contraseña"
-                    className={`w-full px-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-indigo-500 ${
-                      clienteData.password && clienteData.confirmPassword && clienteData.password !== clienteData.confirmPassword
-                        ? 'border-red-400' : 'border-gray-300'
-                    }`}
-                  />
+                  <div className="relative">
+                    <input
+                      type={showConfirmPassword ? "text" : "password"}
+                      value={clienteData.confirmPassword}
+                      onChange={(e) => handleClienteChange('confirmPassword', e.target.value)}
+                      placeholder="Repite tu contraseña"
+                      className={`w-full px-4 pr-12 py-2.5 border rounded-lg focus:ring-2 focus:ring-indigo-500 ${
+                        clienteData.password && clienteData.confirmPassword && clienteData.password !== clienteData.confirmPassword
+                          ? 'border-red-400' : 'border-gray-300'
+                      }`}
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                      className="absolute right-3 top-3 text-gray-400 hover:text-gray-600 focus:outline-none"
+                    >
+                      {showConfirmPassword ? (
+                        <EyeOff className="h-5 w-5" />
+                      ) : (
+                        <Eye className="h-5 w-5" />
+                      )}
+                    </button>
+                  </div>
                   {clienteData.password && clienteData.confirmPassword && clienteData.password !== clienteData.confirmPassword && (
                     <p className="text-red-600 text-xs mt-1">Las contraseñas no coinciden</p>
                   )}

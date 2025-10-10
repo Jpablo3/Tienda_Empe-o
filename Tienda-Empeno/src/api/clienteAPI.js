@@ -56,6 +56,16 @@ export const clienteAPI = {
     }
   },
 
+  // Login de cliente/admin
+  login: async (loginData) => {
+    try {
+      return await apiService.post('/clientes/login', loginData);
+    } catch (error) {
+      console.error('Error al hacer login:', error);
+      throw error;
+    }
+  },
+
   // Obtener cliente por ID
   getClientePorId: async (id) => {
     try {
