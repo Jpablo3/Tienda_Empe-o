@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Upload, X } from 'lucide-react';
 import { articuloAPI } from '../api/articuloAPI';
+import Header from '../components/Header';
 
 const EmpenarArticulo = () => {
   const navigate = useNavigate();
@@ -19,16 +20,6 @@ const EmpenarArticulo = () => {
   const [loading, setLoading] = useState(false);
   const [loadingTipos, setLoadingTipos] = useState(true);
   const [error, setError] = useState('');
-
-  // Verificar sesión al montar el componente
-  useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (!token) {
-      // Guardar la ruta actual para regresar después del login
-      localStorage.setItem('redirectAfterLogin', '/empenar');
-      navigate('/login');
-    }
-  }, [navigate]);
 
   // Cargar tipos de artículos al montar el componente
   useEffect(() => {
@@ -196,8 +187,11 @@ const EmpenarArticulo = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-purple-800 to-blue-900 py-8 px-4">
-      <div className="max-w-4xl mx-auto">
+    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-purple-800 to-blue-900">
+      {/* Header */}
+      <Header />
+
+      <div className="max-w-4xl mx-auto py-8 px-4">
         <h1 className="text-4xl font-bold text-white text-center mb-8">
           Empeñar Artículo
         </h1>

@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
-import { LogIn, AlertCircle, CheckCircle, Mail, Lock, Eye, EyeOff } from 'lucide-react';
+import { LogIn, AlertCircle, CheckCircle, Mail, Lock, Eye, EyeOff, ArrowLeft } from 'lucide-react';
 import { clienteAPI } from '../api/clienteAPI';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 
 const Login = () => {
   const navigate = useNavigate();
+  const { login } = useAuth();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
@@ -77,11 +79,8 @@ const Login = () => {
       console.log('Respuesta del login:', response);
 
       if (response.success) {
-        // Guardar datos en localStorage
-        localStorage.setItem('token', response.token);
-        localStorage.setItem('userId', response.idUsuario);
-        localStorage.setItem('userType', response.tipoUsuario);
-        localStorage.setItem('userEmail', loginData.email);
+        // Usar el contexto de autenticación
+        login(response.token, response.idUsuario, response.tipoUsuario, loginData.email);
 
         // Mostrar mensaje de éxito
         setLoading(false);
@@ -142,6 +141,15 @@ const Login = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 py-12 px-4 sm:px-6 lg:px-8 flex items-center justify-center">
+      {/* Botón Volver */}
+      <button
+        onClick={() => navigate('/')}
+        className="fixed top-4 left-4 p-2 rounded-lg text-gray-600 hover:bg-purple-100 hover:text-purple-700 transition-all z-50"
+        title="Volver al inicio"
+      >
+        <ArrowLeft className="h-6 w-6" />
+      </button>
+
       <div className="max-w-md w-full">
         <div className="bg-white rounded-3xl shadow-xl overflow-hidden">
           {/* Header */}

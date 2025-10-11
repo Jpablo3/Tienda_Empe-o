@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { ChevronDown, MapPin, User, ArrowRight, ArrowLeft, AlertCircle, CheckCircle, Eye, EyeOff } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { ubicacionAPI } from '../api/ubicacionAPI';
 import { clienteAPI } from '../api/clienteAPI';
 import { tipoDocumentoAPI } from '../api/tipoDocumentoAPI';
 
 const ClienteRegistroForm = () => {
+  const navigate = useNavigate();
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
   const [loadingDepartamentos, setLoadingDepartamentos] = useState(false);
@@ -421,6 +423,15 @@ const ClienteRegistroForm = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 py-12 px-4 sm:px-6 lg:px-8">
+      {/* Botón Volver */}
+      <button
+        onClick={() => navigate('/')}
+        className="fixed top-4 left-4 p-2 rounded-lg text-gray-600 hover:bg-purple-100 hover:text-purple-700 transition-all z-50"
+        title="Volver al inicio"
+      >
+        <ArrowLeft className="h-6 w-6" />
+      </button>
+
       <div className="max-w-md mx-auto">
         <div className="bg-white rounded-3xl shadow-xl overflow-hidden">
           {/* Header */}
