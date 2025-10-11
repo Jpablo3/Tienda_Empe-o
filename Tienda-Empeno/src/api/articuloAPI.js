@@ -18,18 +18,24 @@ export const articuloAPI = {
         throw new Error('No hay sesión activa. Por favor inicia sesión.');
       }
 
-      // Por ahora enviar como JSON en lugar de FormData
-      // hasta que el backend esté configurado para recibir multipart/form-data
-      const payload = {
-        idTipoArticulo: articuloData.idTipoArticulo,
-        nombreArticulo: articuloData.nombreArticulo,
-        descripcion: articuloData.descripcionArticulo,
-        estadoArticulo: articuloData.estadoArticulo.toString(),
-        precioArticulo: articuloData.precioSolicitado,
-        urlImagen: 'https://via.placeholder.com/400' // Placeholder temporal
-      };
+      const formData = new FormData();
 
-      const response = await apiService.post('/articulos/registrar', payload);
+      // Agregar datos del artículo
+      formData.append('idTipoArticulo', articuloData.idTipoArticulo);
+      formData.append('nombreArticulo', articuloData.nombreArticulo);
+      formData.append('descripcion', articuloData.descripcionArticulo);
+      formData.append('estadoArticulo', articuloData.estadoArticulo.toString());
+      formData.append('precioArticulo', articuloData.precioSolicitado);
+
+      // Agregar imágenes
+      if (articuloData.imagenes && articuloData.imagenes.length > 0) {
+        articuloData.imagenes.forEach((imagen) => {
+          formData.append('imagenes', imagen);
+        });
+      }
+
+      // Usar apiService.post directamente, el interceptor agregará el token
+      const response = await apiService.post('/articulos/registrar', formData);
 
       return response;
     } catch (error) {
