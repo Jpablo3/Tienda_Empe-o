@@ -32,9 +32,9 @@ const axiosInstance = axios.create({
   // Cambia VITE_API_URL en el archivo .env según tu backend
   baseURL: import.meta.env.VITE_API_URL || 'http://localhost:3000/api',
 
-  // Timeout máximo para las peticiones (10 segundos)
+  // Timeout máximo para las peticiones (30 segundos)
   // Si una petición tarda más, se cancela automáticamente
-  timeout: 10000,
+  timeout: 30000,
 
   // Headers por defecto que se envían en TODAS las peticiones
   headers: {
