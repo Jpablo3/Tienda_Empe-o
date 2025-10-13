@@ -39,7 +39,7 @@ function Home() {
       <Header />
 
       {/* Hero Section */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pb-32">
         <div className="text-center mb-12">
           <h2 className="text-4xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent mb-4">
             Bienvenido a Tienda Empeño
@@ -113,41 +113,41 @@ function Home() {
       </main>
 
       {/* Footer - Botones Principales */}
-      <footer className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-lg">
+      <footer className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-lg z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-3 gap-4 py-4">
+          <div className="grid grid-cols-3 gap-4 py-5">
             <button
               onClick={() => navigate('/empenar')}
-              className="flex flex-col items-center justify-center py-3 px-4 rounded-xl hover:bg-gradient-to-br hover:from-purple-50 hover:to-purple-100 transition-all group"
+              className="flex flex-col items-center justify-center py-3 px-2 rounded-xl hover:bg-gradient-to-br hover:from-purple-50 hover:to-purple-100 transition-all group"
             >
-              <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-purple-600 rounded-full flex items-center justify-center mb-2 group-hover:scale-110 transition-transform">
-                <DollarSign className="h-6 w-6 text-white" />
+              <div className="w-14 h-14 bg-gradient-to-br from-purple-500 to-purple-600 rounded-full flex items-center justify-center mb-3 group-hover:scale-110 transition-transform shadow-md">
+                <DollarSign className="h-7 w-7 text-white" />
               </div>
-              <span className="text-sm font-semibold text-gray-700 group-hover:text-purple-600">
+              <span className="text-sm font-bold text-gray-800 group-hover:text-purple-600 transition-colors">
                 Empeñar
               </span>
             </button>
 
             <button
               onClick={() => navigate('/tienda')}
-              className="flex flex-col items-center justify-center py-3 px-4 rounded-xl hover:bg-gradient-to-br hover:from-blue-50 hover:to-blue-100 transition-all group"
+              className="flex flex-col items-center justify-center py-3 px-2 rounded-xl hover:bg-gradient-to-br hover:from-blue-50 hover:to-blue-100 transition-all group"
             >
-              <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center mb-2 group-hover:scale-110 transition-transform">
-                <Store className="h-6 w-6 text-white" />
+              <div className="w-14 h-14 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center mb-3 group-hover:scale-110 transition-transform shadow-md">
+                <Store className="h-7 w-7 text-white" />
               </div>
-              <span className="text-sm font-semibold text-gray-700 group-hover:text-blue-600">
+              <span className="text-sm font-bold text-gray-800 group-hover:text-blue-600 transition-colors">
                 Tienda
               </span>
             </button>
 
             <button
               onClick={() => navigate('/comprar')}
-              className="flex flex-col items-center justify-center py-3 px-4 rounded-xl hover:bg-gradient-to-br hover:from-indigo-50 hover:to-indigo-100 transition-all group"
+              className="flex flex-col items-center justify-center py-3 px-2 rounded-xl hover:bg-gradient-to-br hover:from-indigo-50 hover:to-indigo-100 transition-all group"
             >
-              <div className="w-12 h-12 bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-full flex items-center justify-center mb-2 group-hover:scale-110 transition-transform">
-                <ShoppingCart className="h-6 w-6 text-white" />
+              <div className="w-14 h-14 bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-full flex items-center justify-center mb-3 group-hover:scale-110 transition-transform shadow-md">
+                <ShoppingCart className="h-7 w-7 text-white" />
               </div>
-              <span className="text-sm font-semibold text-gray-700 group-hover:text-indigo-600">
+              <span className="text-sm font-bold text-gray-800 group-hover:text-indigo-600 transition-colors">
                 Comprar
               </span>
             </button>

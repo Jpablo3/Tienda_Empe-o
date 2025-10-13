@@ -35,7 +35,9 @@ const Login = () => {
       return { valido: false, mensaje: 'Formato de email inválido' };
     }
 
-    // Validar que sea gmail, hotmail o admin.com
+    // Validar dominios permitidos para login
+    // Clientes: gmail.com, hotmail.com
+    // Admins: gmail.com, hotmail.com, admin.com
     const dominiosPermitidos = /@(gmail\.com|hotmail\.com|admin\.com)$/;
     if (!dominiosPermitidos.test(emailLower)) {
       return {
@@ -95,9 +97,8 @@ const Login = () => {
             // Limpiar la ruta guardada
             localStorage.removeItem('redirectAfterLogin');
             navigate(redirectPath);
-          } else if (response.tipoUsuario === 'Administrador') {
-            navigate('/admin/dashboard');
           } else {
+            // Tanto admin como cliente van al home
             navigate('/');
           }
         }, 1500);
@@ -106,9 +107,24 @@ const Login = () => {
         setLoading(false);
       }
     } catch (err) {
-      const mensajeError = err.response?.data?.message || err.message || 'Error al iniciar sesión';
+      console.error('Error completo en login:', err);
+      console.error('Error.response:', err.response);
+      console.error('Error.message:', err.message);
+      console.error('Error.code:', err.code);
+
+      let mensajeError = 'Error al iniciar sesión';
+
+      if (err.code === 'ERR_NETWORK' || err.message === 'Network Error') {
+        mensajeError = 'No se puede conectar al servidor. Verifica que el backend esté corriendo en: ' + (import.meta.env.VITE_API_URL || 'URL no configurada');
+      } else if (err.code === 'ECONNABORTED') {
+        mensajeError = 'La petición tardó demasiado tiempo. El servidor no responde.';
+      } else if (err.response) {
+        mensajeError = err.response.data?.message || `Error del servidor: ${err.response.status}`;
+      } else {
+        mensajeError = err.message || 'Error desconocido';
+      }
+
       setError(mensajeError);
-      console.error('Error en login:', err);
       setLoading(false);
     }
   };
