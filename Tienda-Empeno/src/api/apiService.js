@@ -78,10 +78,11 @@ const apiService = {
    *   password: '123456'
    * });
    */
-  post: async (endpoint, data) => {
+  post: async (endpoint, data, config = {}) => {
     try {
       // Hace la petición POST enviando los datos en el body
-      const response = await axiosInstance.post(endpoint, data);
+      // Acepta configuración adicional (headers, etc.)
+      const response = await axiosInstance.post(endpoint, data, config);
       return response.data;
     } catch (error) {
       console.error('Error en POST:', error);
