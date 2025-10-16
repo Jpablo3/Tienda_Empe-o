@@ -5,6 +5,7 @@ import Home from './pages/Home';
 import ClienteRegistro from './pages/ClienteRegistro';
 import Login from './pages/Login';
 import EmpenarArticulo from './pages/EmpenarArticulo';
+import Perfil from './pages/Perfil';
 
 function App() {
   return (
@@ -19,6 +20,14 @@ function App() {
             element={
               <ProtectedRoute>
                 <EmpenarArticulo />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/perfil"
+            element={
+              <ProtectedRoute>
+                <Perfil />
               </ProtectedRoute>
             }
           />
