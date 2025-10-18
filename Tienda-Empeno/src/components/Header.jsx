@@ -95,12 +95,17 @@ function Header() {
           <div className="flex items-center space-x-3">
             {isAuthenticated() ? (
               <div className="relative" ref={userMenuRef}>
-                {/* Círculo con inicial del usuario */}
+                {/* Círculo con inicial del usuario y nombre debajo */}
                 <button
                   onClick={toggleUserMenu}
-                  className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-600 to-blue-600 flex items-center justify-center text-white font-bold text-lg hover:shadow-lg transition-all hover:scale-105"
+                  className="flex flex-col items-center space-y-1 hover:opacity-80 transition-all"
                 >
-                  {getUserInitial()}
+                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-600 to-blue-600 flex items-center justify-center text-white font-bold text-lg hover:shadow-lg transition-all hover:scale-105">
+                    {getUserInitial()}
+                  </div>
+                  <span className="text-xs font-medium text-gray-700">
+                    Usuario
+                  </span>
                 </button>
 
                 {/* Menú desplegable */}

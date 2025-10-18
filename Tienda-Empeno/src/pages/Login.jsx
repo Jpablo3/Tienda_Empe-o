@@ -42,7 +42,7 @@ const Login = () => {
     if (!dominiosPermitidos.test(emailLower)) {
       return {
         valido: false,
-        mensaje: 'Solo se permiten correos de Gmail, Hotmail o Admin'
+        mensaje: 'Solo se permiten correos de Gmail o Hotmail'
       };
     }
 

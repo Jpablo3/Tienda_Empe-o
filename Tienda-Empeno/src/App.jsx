@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
+import InstallPWA from './components/InstallPWA';
 import Home from './pages/Home';
 import ClienteRegistro from './pages/ClienteRegistro';
 import Login from './pages/Login';
@@ -33,6 +34,7 @@ function App() {
           />
           {/* Agrega más rutas aquí según necesites */}
         </Routes>
+        <InstallPWA />
       </AuthProvider>
     </Router>
   );
