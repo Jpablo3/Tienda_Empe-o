@@ -12,14 +12,14 @@ export const AuthProvider = ({ children }) => {
     const checkAuth = () => {
       const token = localStorage.getItem('token');
       const userId = localStorage.getItem('userId');
-      const userType = localStorage.getItem('userType');
+      const tipoUsuario = localStorage.getItem('tipoUsuario');
       const userEmail = localStorage.getItem('userEmail');
 
       if (token && userId) {
         setUser({
           token,
           userId,
-          userType,
+          tipoUsuario,
           userEmail,
           isAuthenticated: true
         });
@@ -32,16 +32,16 @@ export const AuthProvider = ({ children }) => {
     checkAuth();
   }, []);
 
-  const login = (token, userId, userType, userEmail) => {
+  const login = (token, userId, tipoUsuario, userEmail) => {
     localStorage.setItem('token', token);
     localStorage.setItem('userId', userId);
-    localStorage.setItem('userType', userType);
+    localStorage.setItem('tipoUsuario', tipoUsuario);
     localStorage.setItem('userEmail', userEmail);
 
     setUser({
       token,
       userId,
-      userType,
+      tipoUsuario,
       userEmail,
       isAuthenticated: true
     });
@@ -50,7 +50,7 @@ export const AuthProvider = ({ children }) => {
   const logout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('userId');
-    localStorage.removeItem('userType');
+    localStorage.removeItem('tipoUsuario');
     localStorage.removeItem('userEmail');
     localStorage.removeItem('redirectAfterLogin');
 

@@ -98,8 +98,12 @@ const Login = () => {
             localStorage.removeItem('redirectAfterLogin');
             navigate(redirectPath);
           } else {
-            // Tanto admin como cliente van al home
-            navigate('/');
+            // Redirigir según el tipo de usuario
+            if (response.tipoUsuario === 'Administrador') {
+              navigate('/admin');
+            } else {
+              navigate('/');
+            }
           }
         }, 1500);
       } else {

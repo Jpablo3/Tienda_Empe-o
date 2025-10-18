@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
+import ProtectedRouteAdmin from './components/ProtectedRouteAdmin';
 import InstallPWA from './components/InstallPWA';
 import Home from './pages/Home';
 import ClienteRegistro from './pages/ClienteRegistro';
@@ -8,6 +9,9 @@ import Login from './pages/Login';
 import EmpenarArticulo from './pages/EmpenarArticulo';
 import VenderArticulo from './pages/VenderArticulo';
 import Perfil from './pages/Perfil';
+import PanelAdmin from './pages/admin/PanelAdmin';
+import ArticulosPrestamos from './pages/admin/ArticulosPrestamos';
+import ArticulosCompras from './pages/admin/ArticulosCompras';
 
 function App() {
   return (
@@ -41,7 +45,31 @@ function App() {
               </ProtectedRoute>
             }
           />
-          {/* Agrega más rutas aquí según necesites */}
+          {/* Rutas de Administrador */}
+          <Route
+            path="/admin"
+            element={
+              <ProtectedRouteAdmin>
+                <PanelAdmin />
+              </ProtectedRouteAdmin>
+            }
+          />
+          <Route
+            path="/admin/prestamos"
+            element={
+              <ProtectedRouteAdmin>
+                <ArticulosPrestamos />
+              </ProtectedRouteAdmin>
+            }
+          />
+          <Route
+            path="/admin/compras"
+            element={
+              <ProtectedRouteAdmin>
+                <ArticulosCompras />
+              </ProtectedRouteAdmin>
+            }
+          />
         </Routes>
         <InstallPWA />
       </AuthProvider>
