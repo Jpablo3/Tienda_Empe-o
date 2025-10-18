@@ -6,6 +6,7 @@ import Home from './pages/Home';
 import ClienteRegistro from './pages/ClienteRegistro';
 import Login from './pages/Login';
 import EmpenarArticulo from './pages/EmpenarArticulo';
+import VenderArticulo from './pages/VenderArticulo';
 import Perfil from './pages/Perfil';
 
 function App() {
@@ -29,6 +30,14 @@ function App() {
             element={
               <ProtectedRoute>
                 <Perfil />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/ventas"
+            element={
+              <ProtectedRoute>
+                <VenderArticulo />
               </ProtectedRoute>
             }
           />

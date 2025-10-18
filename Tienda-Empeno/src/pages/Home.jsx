@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { Store, ShoppingCart, DollarSign } from 'lucide-react';
+import { Store, HandCoins, DollarSign } from 'lucide-react';
 import Header from '../components/Header';
 
 function Home() {
@@ -101,11 +101,11 @@ function Home() {
             </div>
             <div className="text-center">
               <div className="w-16 h-16 bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                <ShoppingCart className="h-8 w-8 text-white" />
+                <HandCoins className="h-8 w-8 text-white" />
               </div>
-              <h4 className="font-semibold text-lg mb-2">Comprar</h4>
+              <h4 className="font-semibold text-lg mb-2">Ventas</h4>
               <p className="text-gray-600 text-sm">
-                Adquiere artículos de calidad a excelentes precios
+                Vende tus artículos de forma rápida y segura
               </p>
             </div>
           </div>
@@ -141,14 +141,14 @@ function Home() {
             </button>
 
             <button
-              onClick={() => navigate('/comprar')}
+              onClick={() => navigate('/ventas')}
               className="flex flex-col items-center justify-center py-3 px-2 rounded-xl hover:bg-gradient-to-br hover:from-indigo-50 hover:to-indigo-100 transition-all group"
             >
               <div className="w-14 h-14 bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-full flex items-center justify-center mb-3 group-hover:scale-110 transition-transform shadow-md">
-                <ShoppingCart className="h-7 w-7 text-white" />
+                <HandCoins className="h-7 w-7 text-white" />
               </div>
               <span className="text-sm font-bold text-gray-800 group-hover:text-indigo-600 transition-colors">
-                Comprar
+                Ventas
               </span>
             </button>
           </div>
