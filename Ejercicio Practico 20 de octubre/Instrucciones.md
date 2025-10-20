@@ -1,7 +1,3 @@
-# Patrón Prototype - TypeScript
-
-Implementación simple del patrón de diseño Prototype según https://refactoring.guru/es/design-patterns/prototype
-
 ## Archivos
 
 - `Prototype.ts` - Interfaz que define el método clone()
@@ -19,14 +15,6 @@ npm install
 ```bash
 npm run dev
 ```
-
-O ejecutar paso a paso:
-
-```bash
-npm run build
-npm start
-```
-
 ## ¿Qué hace?
 
 El patrón Prototype permite copiar objetos existentes sin depender de sus clases. El programa:

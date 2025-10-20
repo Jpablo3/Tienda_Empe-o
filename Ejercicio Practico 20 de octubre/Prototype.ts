@@ -1,7 +1,4 @@
-/**
- * Interfaz Prototype
- * Define el método clone que deben implementar los objetos clonables
- */
+//esta es la interfaz //
 export interface Prototype {
     clone(): Prototype;
 }
