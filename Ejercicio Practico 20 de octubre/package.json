@@ -1,0 +1,13 @@
+{
+  "name": "patron-prototype",
+  "version": "1.0.0",
+  "description": "Implementación del patrón Prototype en TypeScript",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/main.js",
+    "dev": "tsc && node dist/main.js"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3"
+  }
+}
