@@ -1,2 +1,5 @@
 /.claude
 /Ejercicio Practico 20 de octubre/
+node_modules/
+.vscode/
+*.rar
