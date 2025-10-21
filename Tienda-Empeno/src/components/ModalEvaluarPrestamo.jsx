@@ -158,13 +158,13 @@ const ModalEvaluarPrestamo = ({ articulo, onClose, onSuccess }) => {
               <div>
                 <span className="text-gray-600">Precio Solicitado:</span>
                 <p className="font-bold text-blue-600">
-                  ${parseFloat(articulo.precioArticulo).toLocaleString('es-MX', { minimumFractionDigits: 2 })}
+                  Q{parseFloat(articulo.precioArticulo).toLocaleString('es-GT', { minimumFractionDigits: 2 })}
                 </p>
               </div>
               <div>
                 <span className="text-gray-600">Avalúo del Sistema:</span>
                 <p className="font-bold text-green-600">
-                  ${parseFloat(articulo.precioAvaluo).toLocaleString('es-MX', { minimumFractionDigits: 2 })}
+                  Q{parseFloat(articulo.precioAvaluo).toLocaleString('es-GT', { minimumFractionDigits: 2 })}
                 </p>
               </div>
               <div>
@@ -214,7 +214,7 @@ const ModalEvaluarPrestamo = ({ articulo, onClose, onSuccess }) => {
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Monto del Préstamo (MXN)
+                    Monto del Préstamo (GTQ)
                   </label>
                   <input
                     type="number"
@@ -225,7 +225,7 @@ const ModalEvaluarPrestamo = ({ articulo, onClose, onSuccess }) => {
                     className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                   />
                   <p className="text-xs text-gray-500 mt-1">
-                    Sugerencia: 70% del avalúo = ${(parseFloat(articulo.precioAvaluo) * 0.7).toLocaleString('es-MX', { minimumFractionDigits: 2 })}
+                    Sugerencia: 70% del avalúo = Q{(parseFloat(articulo.precioAvaluo) * 0.7).toLocaleString('es-GT', { minimumFractionDigits: 2 })}
                   </p>
                 </div>
 

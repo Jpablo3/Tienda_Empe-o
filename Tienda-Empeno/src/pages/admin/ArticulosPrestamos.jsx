@@ -166,13 +166,13 @@ const ArticulosPrestamos = () => {
                     <div className="flex items-center justify-between">
                       <span className="text-sm text-gray-600">Solicitado:</span>
                       <span className="text-base font-bold text-blue-600">
-                        ${parseFloat(articulo.precioArticulo).toLocaleString('es-MX', { minimumFractionDigits: 2 })}
+                        Q{parseFloat(articulo.precioArticulo).toLocaleString('es-GT', { minimumFractionDigits: 2 })}
                       </span>
                     </div>
                     <div className="flex items-center justify-between">
                       <span className="text-sm text-gray-600">Avalúo:</span>
                       <span className="text-base font-bold text-green-600">
-                        ${parseFloat(articulo.precioAvaluo).toLocaleString('es-MX', { minimumFractionDigits: 2 })}
+                        Q{parseFloat(articulo.precioAvaluo).toLocaleString('es-GT', { minimumFractionDigits: 2 })}
                       </span>
                     </div>
                   </div>

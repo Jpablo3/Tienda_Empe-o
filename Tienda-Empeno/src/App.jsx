@@ -9,6 +9,10 @@ import Login from './pages/Login';
 import EmpenarArticulo from './pages/EmpenarArticulo';
 import VenderArticulo from './pages/VenderArticulo';
 import Perfil from './pages/Perfil';
+import Contratos from './pages/Contratos';
+import DetalleContrato from './pages/DetalleContrato';
+import MisPrestamos from './pages/MisPrestamos';
+import PagarPrestamo from './pages/PagarPrestamo';
 import PanelAdmin from './pages/admin/PanelAdmin';
 import ArticulosPrestamos from './pages/admin/ArticulosPrestamos';
 import ArticulosCompras from './pages/admin/ArticulosCompras';
@@ -42,6 +46,38 @@ function App() {
             element={
               <ProtectedRoute>
                 <VenderArticulo />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/contratos"
+            element={
+              <ProtectedRoute>
+                <Contratos />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/contratos/:id"
+            element={
+              <ProtectedRoute>
+                <DetalleContrato />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/prestamos"
+            element={
+              <ProtectedRoute>
+                <MisPrestamos />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/prestamos/:id/pagar"
+            element={
+              <ProtectedRoute>
+                <PagarPrestamo />
               </ProtectedRoute>
             }
           />

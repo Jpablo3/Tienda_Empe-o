@@ -22,7 +22,13 @@ function ProtectedRoute({ children }) {
     return <Navigate to="/login" replace />;
   }
 
-  // Si está autenticado, mostrar el contenido protegido
+  // Si es administrador, redirigir al panel de administrador
+  const tipoUsuario = localStorage.getItem('tipoUsuario');
+  if (tipoUsuario === 'Administrador') {
+    return <Navigate to="/admin" replace />;
+  }
+
+  // Si está autenticado y es cliente, mostrar el contenido protegido
   return children;
 }
 

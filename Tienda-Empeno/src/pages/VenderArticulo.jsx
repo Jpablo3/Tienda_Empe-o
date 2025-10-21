@@ -332,10 +332,10 @@ const VenderArticulo = () => {
 
                   <div>
                     <label className="block text-sm font-semibold text-gray-700 mb-2">
-                      Precio de Venta (MXN)
+                      Precio de Venta (GTQ)
                     </label>
                     <div className="relative">
-                      <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 text-lg font-bold">$</span>
+                      <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 text-lg font-bold">Q</span>
                       <input
                         type="number"
                         name="precio"

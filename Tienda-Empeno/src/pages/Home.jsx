@@ -1,9 +1,18 @@
 import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
 import { Store, HandCoins, DollarSign } from 'lucide-react';
 import Header from '../components/Header';
 
 function Home() {
   const navigate = useNavigate();
+
+  // Redirigir a los administradores al panel de administrador
+  useEffect(() => {
+    const tipoUsuario = localStorage.getItem('tipoUsuario');
+    if (tipoUsuario === 'Administrador') {
+      navigate('/admin', { replace: true });
+    }
+  }, [navigate]);
 
   // Imágenes destacadas (puedes reemplazar con tus URLs)
   const featuredItems = [

@@ -88,19 +88,20 @@ const Login = () => {
         setLoading(false);
         setSuccess('¡Ha ingresado exitosamente!');
 
-        // Verificar si hay una ruta de redirección guardada
-        const redirectPath = localStorage.getItem('redirectAfterLogin');
-
         // Redirigir después de 1.5 segundos
         setTimeout(() => {
-          if (redirectPath) {
-            // Limpiar la ruta guardada
+          // Los administradores SIEMPRE van al panel de administrador
+          if (response.tipoUsuario === 'Administrador') {
+            // Limpiar cualquier ruta de redirección guardada
             localStorage.removeItem('redirectAfterLogin');
-            navigate(redirectPath);
+            navigate('/admin');
           } else {
-            // Redirigir según el tipo de usuario
-            if (response.tipoUsuario === 'Administrador') {
-              navigate('/admin');
+            // Para clientes, verificar si hay una ruta de redirección guardada
+            const redirectPath = localStorage.getItem('redirectAfterLogin');
+            if (redirectPath) {
+              // Limpiar la ruta guardada
+              localStorage.removeItem('redirectAfterLogin');
+              navigate(redirectPath);
             } else {
               navigate('/');
             }

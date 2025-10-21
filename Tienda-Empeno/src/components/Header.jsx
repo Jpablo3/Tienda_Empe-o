@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Menu, X, LogIn, UserPlus, LogOut, Home as HomeIcon, Package, Settings, DollarSign, ArrowLeft, User } from 'lucide-react';
+import { Menu, X, LogIn, UserPlus, LogOut, Home as HomeIcon, Package, Settings, ArrowLeft, User, FileText, CreditCard } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
 function Header() {
@@ -13,7 +13,8 @@ function Header() {
 
   const menuLinks = [
     { name: 'Inicio', icon: <HomeIcon className="h-5 w-5" />, path: '/' },
-    { name: 'Mis Préstamos', icon: <DollarSign className="h-5 w-5" />, path: '/prestamos', requireAuth: true },
+    { name: 'Contratos', icon: <FileText className="h-5 w-5" />, path: '/contratos', requireAuth: true },
+    { name: 'Mis Préstamos', icon: <CreditCard className="h-5 w-5" />, path: '/prestamos', requireAuth: true },
     { name: 'Mis Artículos', icon: <Package className="h-5 w-5" />, path: '/articulos', requireAuth: true },
     { name: 'Configuración', icon: <Settings className="h-5 w-5" />, path: '/configuracion', requireAuth: true }
   ];

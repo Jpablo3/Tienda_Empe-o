@@ -54,5 +54,18 @@ export const prestamosAPI = {
       console.error('Error al obtener préstamo:', error);
       throw error;
     }
+  },
+
+  // Listar préstamos activos del cliente (estado 5)
+  listarMisPrestamosActivos: async () => {
+    try {
+      // Este endpoint necesita ser creado en el backend
+      // Por ahora retornará error, pero la estructura está lista
+      const response = await apiService.get('/prestamos/mis-prestamos-activos');
+      return response;
+    } catch (error) {
+      console.error('Error al listar préstamos activos:', error);
+      throw error;
+    }
   }
 };

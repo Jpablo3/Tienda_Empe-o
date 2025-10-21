@@ -3,12 +3,16 @@ import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Package, User, DollarSign, Star, Mail } from 'lucide-react';
 import HeaderAdmin from '../../components/HeaderAdmin';
 import { adminAPI } from '../../api/adminAPI';
+import ModalEvaluarCompra from '../../components/ModalEvaluarCompra';
 
 const ArticulosCompras = () => {
   const navigate = useNavigate();
   const [articulos, setArticulos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [showModal, setShowModal] = useState(false);
+  const [articuloSeleccionado, setArticuloSeleccionado] = useState(null);
+  const [successMessage, setSuccessMessage] = useState('');
 
   useEffect(() => {
     cargarArticulos();
@@ -36,8 +40,21 @@ const ArticulosCompras = () => {
   };
 
   const handleEvaluar = (articulo) => {
-    // Por ahora solo mostramos un alert, luego crearemos un modal de evaluación
-    alert(`Evaluar artículo para compra: ${articulo.nombreArticulo}\nID: ${articulo.idArticulo}`);
+    setArticuloSeleccionado(articulo);
+    setShowModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+    setArticuloSeleccionado(null);
+  };
+
+  const handleSuccess = (message) => {
+    setSuccessMessage(message);
+    // Recargar la lista de artículos
+    cargarArticulos();
+    // Limpiar mensaje después de 3 segundos
+    setTimeout(() => setSuccessMessage(''), 3000);
   };
 
   const getEstadoColor = (estado) => {
@@ -71,6 +88,13 @@ const ArticulosCompras = () => {
             Revisa y evalúa los artículos que los clientes desean vender
           </p>
         </div>
+
+        {/* Mensaje de Éxito */}
+        {successMessage && (
+          <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-lg mb-6">
+            {successMessage}
+          </div>
+        )}
 
         {/* Mensaje de Error */}
         {error && (
@@ -147,7 +171,7 @@ const ArticulosCompras = () => {
                   <div className="flex items-center space-x-2 mb-3">
                     <DollarSign className="w-4 h-4 text-green-600" />
                     <span className="text-lg font-bold text-green-600">
-                      ${parseFloat(articulo.precioArticulo).toLocaleString('es-MX', { minimumFractionDigits: 2 })}
+                      Q{parseFloat(articulo.precioArticulo).toLocaleString('es-GT', { minimumFractionDigits: 2 })}
                     </span>
                   </div>
 
@@ -179,6 +203,15 @@ const ArticulosCompras = () => {
           </div>
         )}
       </div>
+
+      {/* Modal de Evaluación */}
+      {showModal && articuloSeleccionado && (
+        <ModalEvaluarCompra
+          articulo={articuloSeleccionado}
+          onClose={handleCloseModal}
+          onSuccess={handleSuccess}
+        />
+      )}
     </div>
   );
 };
