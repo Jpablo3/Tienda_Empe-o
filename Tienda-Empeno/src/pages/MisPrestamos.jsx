@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { CreditCard, DollarSign, Calendar, Package, AlertCircle, Loader, Clock } from 'lucide-react';
+import { CreditCard, DollarSign, Package, Loader, Clock } from 'lucide-react';
 import Header from '../components/Header';
 import { prestamosAPI } from '../api/prestamosAPI';
 
@@ -9,10 +9,29 @@ const MisPrestamos = () => {
   const [prestamos, setPrestamos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [imagenesActuales, setImagenesActuales] = useState({});
 
   useEffect(() => {
     cargarPrestamos();
   }, []);
+
+  // Carrusel automático de imágenes (cada 5 segundos)
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setImagenesActuales(prev => {
+        const nuevasImagenes = { ...prev };
+        prestamos.forEach(prestamo => {
+          if (prestamo.imagenes && prestamo.imagenes.length > 1) {
+            const indexActual = nuevasImagenes[prestamo.idPrestamo] || 0;
+            nuevasImagenes[prestamo.idPrestamo] = (indexActual + 1) % prestamo.imagenes.length;
+          }
+        });
+        return nuevasImagenes;
+      });
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, [prestamos]);
 
   const cargarPrestamos = async () => {
     try {
@@ -123,6 +142,54 @@ const MisPrestamos = () => {
                       {estadoPago.icon} {estadoPago.texto}
                     </p>
                   </div>
+
+                  {/* Carrusel de imágenes del artículo */}
+                  {prestamo.imagenes && prestamo.imagenes.length > 0 ? (
+                    <div className="relative h-48 bg-gray-100">
+                      <img
+                        src={`http://localhost:8080${prestamo.imagenes[imagenesActuales[prestamo.idPrestamo] || 0]}`}
+                        alt={prestamo.nombreArticulo}
+                        className="w-full h-full object-cover transition-opacity duration-500"
+                        loading="lazy"
+                        onError={(e) => {
+                          e.target.style.display = 'none';
+                          e.target.parentElement.innerHTML = '<div class="flex items-center justify-center h-full bg-gradient-to-br from-purple-100 to-blue-100"><div class="w-16 h-16 text-gray-400">📦</div></div>';
+                        }}
+                      />
+                      {/* Indicadores de carrusel */}
+                      {prestamo.imagenes.length > 1 && (
+                        <div className="absolute bottom-2 left-0 right-0 flex justify-center space-x-2">
+                          {prestamo.imagenes.map((_, index) => (
+                            <div
+                              key={index}
+                              className={`h-2 rounded-full transition-all duration-300 ${
+                                index === (imagenesActuales[prestamo.idPrestamo] || 0)
+                                  ? 'w-6 bg-white'
+                                  : 'w-2 bg-white/50'
+                              }`}
+                            />
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  ) : prestamo.urlImagen ? (
+                    <div className="relative h-48 bg-gray-100">
+                      <img
+                        src={`http://localhost:8080${prestamo.urlImagen}`}
+                        alt={prestamo.nombreArticulo}
+                        className="w-full h-full object-cover"
+                        loading="lazy"
+                        onError={(e) => {
+                          e.target.style.display = 'none';
+                          e.target.parentElement.innerHTML = '<div class="flex items-center justify-center h-full bg-gradient-to-br from-purple-100 to-blue-100"><div class="w-16 h-16 text-gray-400">📦</div></div>';
+                        }}
+                      />
+                    </div>
+                  ) : (
+                    <div className="h-48 bg-gradient-to-br from-purple-100 to-blue-100 flex items-center justify-center">
+                      <Package className="w-16 h-16 text-gray-400" />
+                    </div>
+                  )}
 
                   {/* Contenido */}
                   <div className="p-6">

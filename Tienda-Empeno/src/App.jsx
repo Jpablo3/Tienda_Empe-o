@@ -13,6 +13,7 @@ import Contratos from './pages/Contratos';
 import DetalleContrato from './pages/DetalleContrato';
 import MisPrestamos from './pages/MisPrestamos';
 import PagarPrestamo from './pages/PagarPrestamo';
+import MisVentas from './pages/MisVentas';
 import PanelAdmin from './pages/admin/PanelAdmin';
 import ArticulosPrestamos from './pages/admin/ArticulosPrestamos';
 import ArticulosCompras from './pages/admin/ArticulosCompras';
@@ -78,6 +79,14 @@ function App() {
             element={
               <ProtectedRoute>
                 <PagarPrestamo />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/mis-ventas"
+            element={
+              <ProtectedRoute>
+                <MisVentas />
               </ProtectedRoute>
             }
           />
