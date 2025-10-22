@@ -21,9 +21,11 @@ const MisPrestamos = () => {
       setImagenesActuales(prev => {
         const nuevasImagenes = { ...prev };
         prestamos.forEach(prestamo => {
-          if (prestamo.imagenes && prestamo.imagenes.length > 1) {
+          // Obtener array de imágenes válidas
+          const imagenesValidas = obtenerImagenesValidas(prestamo);
+          if (imagenesValidas.length > 1) {
             const indexActual = nuevasImagenes[prestamo.idPrestamo] || 0;
-            nuevasImagenes[prestamo.idPrestamo] = (indexActual + 1) % prestamo.imagenes.length;
+            nuevasImagenes[prestamo.idPrestamo] = (indexActual + 1) % imagenesValidas.length;
           }
         });
         return nuevasImagenes;
@@ -32,6 +34,27 @@ const MisPrestamos = () => {
 
     return () => clearInterval(interval);
   }, [prestamos]);
+
+  // Función helper para obtener imágenes válidas
+  const obtenerImagenesValidas = (prestamo) => {
+    const imagenes = [];
+
+    // Intentar usar el array de imágenes del backend
+    if (prestamo.imagenes && Array.isArray(prestamo.imagenes)) {
+      prestamo.imagenes.forEach(img => {
+        if (typeof img === 'string' && img.trim().length > 0) {
+          imagenes.push(img);
+        }
+      });
+    }
+
+    // Si no hay imágenes en el array, usar urlImagen como fallback
+    if (imagenes.length === 0 && prestamo.urlImagen && typeof prestamo.urlImagen === 'string') {
+      imagenes.push(prestamo.urlImagen);
+    }
+
+    return imagenes;
+  };
 
   const cargarPrestamos = async () => {
     try {
@@ -144,52 +167,50 @@ const MisPrestamos = () => {
                   </div>
 
                   {/* Carrusel de imágenes del artículo */}
-                  {prestamo.imagenes && prestamo.imagenes.length > 0 ? (
-                    <div className="relative h-48 bg-gray-100">
-                      <img
-                        src={`http://localhost:8080${prestamo.imagenes[imagenesActuales[prestamo.idPrestamo] || 0]}`}
-                        alt={prestamo.nombreArticulo}
-                        className="w-full h-full object-cover transition-opacity duration-500"
-                        loading="lazy"
-                        onError={(e) => {
-                          e.target.style.display = 'none';
-                          e.target.parentElement.innerHTML = '<div class="flex items-center justify-center h-full bg-gradient-to-br from-purple-100 to-blue-100"><div class="w-16 h-16 text-gray-400">📦</div></div>';
-                        }}
-                      />
-                      {/* Indicadores de carrusel */}
-                      {prestamo.imagenes.length > 1 && (
-                        <div className="absolute bottom-2 left-0 right-0 flex justify-center space-x-2">
-                          {prestamo.imagenes.map((_, index) => (
-                            <div
-                              key={index}
-                              className={`h-2 rounded-full transition-all duration-300 ${
-                                index === (imagenesActuales[prestamo.idPrestamo] || 0)
-                                  ? 'w-6 bg-white'
-                                  : 'w-2 bg-white/50'
-                              }`}
-                            />
-                          ))}
+                  {(() => {
+                    const imagenesValidas = obtenerImagenesValidas(prestamo);
+                    const indexActual = imagenesActuales[prestamo.idPrestamo] || 0;
+
+                    if (imagenesValidas.length > 0) {
+                      return (
+                        <div className="relative h-48 bg-gray-100">
+                          <img
+                            src={`http://localhost:8080${imagenesValidas[indexActual]}`}
+                            alt={prestamo.nombreArticulo}
+                            className="w-full h-full object-cover transition-opacity duration-500"
+                            loading="lazy"
+                          />
+                          {/* Indicadores de carrusel */}
+                          {imagenesValidas.length > 1 && (
+                            <div className="absolute bottom-2 left-0 right-0 flex justify-center space-x-2">
+                              {imagenesValidas.map((_, index) => (
+                                <div
+                                  key={index}
+                                  className={`h-2 rounded-full transition-all duration-300 ${
+                                    index === indexActual
+                                      ? 'w-6 bg-white shadow-lg'
+                                      : 'w-2 bg-white/60'
+                                  }`}
+                                />
+                              ))}
+                            </div>
+                          )}
+                          {/* Contador de imágenes */}
+                          {imagenesValidas.length > 1 && (
+                            <div className="absolute top-2 right-2 bg-black/50 text-white text-xs px-2 py-1 rounded-full">
+                              {indexActual + 1}/{imagenesValidas.length}
+                            </div>
+                          )}
                         </div>
-                      )}
-                    </div>
-                  ) : prestamo.urlImagen ? (
-                    <div className="relative h-48 bg-gray-100">
-                      <img
-                        src={`http://localhost:8080${prestamo.urlImagen}`}
-                        alt={prestamo.nombreArticulo}
-                        className="w-full h-full object-cover"
-                        loading="lazy"
-                        onError={(e) => {
-                          e.target.style.display = 'none';
-                          e.target.parentElement.innerHTML = '<div class="flex items-center justify-center h-full bg-gradient-to-br from-purple-100 to-blue-100"><div class="w-16 h-16 text-gray-400">📦</div></div>';
-                        }}
-                      />
-                    </div>
-                  ) : (
-                    <div className="h-48 bg-gradient-to-br from-purple-100 to-blue-100 flex items-center justify-center">
-                      <Package className="w-16 h-16 text-gray-400" />
-                    </div>
-                  )}
+                      );
+                    } else {
+                      return (
+                        <div className="h-48 bg-gradient-to-br from-purple-100 to-blue-100 flex items-center justify-center">
+                          <Package className="w-16 h-16 text-gray-400" />
+                        </div>
+                      );
+                    }
+                  })()}
 
                   {/* Contenido */}
                   <div className="p-6">

@@ -10,19 +10,58 @@ const MisVentas = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [filtro, setFiltro] = useState('todas'); // 'todas', 'pendientes', 'aprobadas', 'rechazadas'
+  const [imagenesActuales, setImagenesActuales] = useState({});
 
   useEffect(() => {
     cargarVentas();
   }, []);
+
+  // Carrusel automático de imágenes (cada 5 segundos)
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setImagenesActuales(prev => {
+        const nuevasImagenes = { ...prev };
+        ventas.forEach(venta => {
+          // Obtener array de imágenes válidas
+          const imagenesValidas = obtenerImagenesValidas(venta);
+          if (imagenesValidas.length > 1) {
+            const indexActual = nuevasImagenes[venta.idCompra] || 0;
+            nuevasImagenes[venta.idCompra] = (indexActual + 1) % imagenesValidas.length;
+          }
+        });
+        return nuevasImagenes;
+      });
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, [ventas]);
+
+  // Función helper para obtener imágenes válidas
+  const obtenerImagenesValidas = (venta) => {
+    const imagenes = [];
+
+    // Intentar usar el array de imágenes del backend
+    if (venta.imagenes && Array.isArray(venta.imagenes)) {
+      venta.imagenes.forEach(img => {
+        if (typeof img === 'string' && img.trim().length > 0) {
+          imagenes.push(img);
+        }
+      });
+    }
+
+    // Si no hay imágenes en el array, usar urlImagen como fallback
+    if (imagenes.length === 0 && venta.urlImagen && typeof venta.urlImagen === 'string') {
+      imagenes.push(venta.urlImagen);
+    }
+
+    return imagenes;
+  };
 
   const cargarVentas = async () => {
     try {
       setLoading(true);
       setError('');
       const response = await ventasAPI.listarMisVentas();
-      console.log('=== DEBUG VENTAS ===');
-      console.log('Primera venta completa:', response[0]);
-      console.log('urlImagen de primera venta:', response[0]?.urlImagen);
       setVentas(response);
     } catch (error) {
       console.error('Error al cargar ventas:', error);
@@ -200,20 +239,50 @@ const MisVentas = () => {
                   </div>
 
                   {/* Carrusel de imágenes del artículo */}
-                  {venta.urlImagen ? (
-                    <div className="relative h-48 bg-gray-100">
-                      <img
-                        src={`http://localhost:8080${venta.urlImagen}`}
-                        alt={venta.nombreArticulo}
-                        className="w-full h-full object-cover"
-                        loading="lazy"
-                      />
-                    </div>
-                  ) : (
-                    <div className="h-48 bg-gradient-to-br from-purple-100 to-blue-100 flex items-center justify-center">
-                      <ShoppingBag className="w-16 h-16 text-gray-400" />
-                    </div>
-                  )}
+                  {(() => {
+                    const imagenesValidas = obtenerImagenesValidas(venta);
+                    const indexActual = imagenesActuales[venta.idCompra] || 0;
+
+                    if (imagenesValidas.length > 0) {
+                      return (
+                        <div className="relative h-48 bg-gray-100">
+                          <img
+                            src={`http://localhost:8080${imagenesValidas[indexActual]}`}
+                            alt={venta.nombreArticulo}
+                            className="w-full h-full object-cover transition-opacity duration-500"
+                            loading="lazy"
+                          />
+                          {/* Indicadores de carrusel */}
+                          {imagenesValidas.length > 1 && (
+                            <div className="absolute bottom-2 left-0 right-0 flex justify-center space-x-2">
+                              {imagenesValidas.map((_, index) => (
+                                <div
+                                  key={index}
+                                  className={`h-2 rounded-full transition-all duration-300 ${
+                                    index === indexActual
+                                      ? 'w-6 bg-white shadow-lg'
+                                      : 'w-2 bg-white/60'
+                                  }`}
+                                />
+                              ))}
+                            </div>
+                          )}
+                          {/* Contador de imágenes */}
+                          {imagenesValidas.length > 1 && (
+                            <div className="absolute top-2 right-2 bg-black/50 text-white text-xs px-2 py-1 rounded-full">
+                              {indexActual + 1}/{imagenesValidas.length}
+                            </div>
+                          )}
+                        </div>
+                      );
+                    } else {
+                      return (
+                        <div className="h-48 bg-gradient-to-br from-purple-100 to-blue-100 flex items-center justify-center">
+                          <ShoppingBag className="w-16 h-16 text-gray-400" />
+                        </div>
+                      );
+                    }
+                  })()}
 
                   {/* Contenido */}
                   <div className="p-6">

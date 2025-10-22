@@ -13,10 +13,49 @@ const ArticulosCompras = () => {
   const [showModal, setShowModal] = useState(false);
   const [articuloSeleccionado, setArticuloSeleccionado] = useState(null);
   const [successMessage, setSuccessMessage] = useState('');
+  const [imagenesActuales, setImagenesActuales] = useState({});
 
   useEffect(() => {
     cargarArticulos();
   }, []);
+
+  // Carrusel automático de imágenes (cada 5 segundos)
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setImagenesActuales(prev => {
+        const nuevasImagenes = { ...prev };
+        articulos.forEach(articulo => {
+          const imagenesValidas = obtenerImagenesValidas(articulo);
+          if (imagenesValidas.length > 1) {
+            const indexActual = nuevasImagenes[articulo.idArticulo] || 0;
+            nuevasImagenes[articulo.idArticulo] = (indexActual + 1) % imagenesValidas.length;
+          }
+        });
+        return nuevasImagenes;
+      });
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, [articulos]);
+
+  // Función helper para obtener imágenes válidas
+  const obtenerImagenesValidas = (articulo) => {
+    const imagenes = [];
+
+    if (articulo.imagenes && Array.isArray(articulo.imagenes)) {
+      articulo.imagenes.forEach(img => {
+        if (typeof img === 'string' && img.trim().length > 0) {
+          imagenes.push(img);
+        }
+      });
+    }
+
+    if (imagenes.length === 0 && articulo.urlImagen && typeof articulo.urlImagen === 'string') {
+      imagenes.push(articulo.urlImagen);
+    }
+
+    return imagenes;
+  };
 
   const cargarArticulos = async () => {
     try {
@@ -126,24 +165,50 @@ const ArticulosCompras = () => {
                 key={articulo.idArticulo}
                 className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden"
               >
-                {/* Imagen del Artículo */}
-                {articulo.urlImagen ? (
-                  <div className="h-48 bg-gray-200 overflow-hidden">
-                    <img
-                      src={`http://localhost:8080${articulo.urlImagen}`}
-                      alt={articulo.nombreArticulo}
-                      className="w-full h-full object-cover"
-                      onError={(e) => {
-                        e.target.style.display = 'none';
-                        e.target.parentElement.innerHTML = '<div class="w-full h-full flex items-center justify-center bg-gradient-to-br from-blue-100 to-indigo-100"><svg class="w-16 h-16 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg></div>';
-                      }}
-                    />
-                  </div>
-                ) : (
-                  <div className="h-48 bg-gradient-to-br from-blue-100 to-indigo-100 flex items-center justify-center">
-                    <Package className="w-16 h-16 text-blue-400" />
-                  </div>
-                )}
+                {/* Carrusel de Imágenes del Artículo */}
+                {(() => {
+                  const imagenesValidas = obtenerImagenesValidas(articulo);
+                  const indexActual = imagenesActuales[articulo.idArticulo] || 0;
+
+                  if (imagenesValidas.length > 0) {
+                    return (
+                      <div className="relative h-48 bg-gray-200 overflow-hidden">
+                        <img
+                          src={`http://localhost:8080${imagenesValidas[indexActual]}`}
+                          alt={articulo.nombreArticulo}
+                          className="w-full h-full object-cover transition-opacity duration-500"
+                        />
+                        {/* Indicadores de carrusel */}
+                        {imagenesValidas.length > 1 && (
+                          <div className="absolute bottom-2 left-0 right-0 flex justify-center space-x-2">
+                            {imagenesValidas.map((_, index) => (
+                              <div
+                                key={index}
+                                className={`h-2 rounded-full transition-all duration-300 ${
+                                  index === indexActual
+                                    ? 'w-6 bg-white shadow-lg'
+                                    : 'w-2 bg-white/60'
+                                }`}
+                              />
+                            ))}
+                          </div>
+                        )}
+                        {/* Contador de imágenes */}
+                        {imagenesValidas.length > 1 && (
+                          <div className="absolute top-2 right-2 bg-black/50 text-white text-xs px-2 py-1 rounded-full">
+                            {indexActual + 1}/{imagenesValidas.length}
+                          </div>
+                        )}
+                      </div>
+                    );
+                  } else {
+                    return (
+                      <div className="h-48 bg-gradient-to-br from-blue-100 to-indigo-100 flex items-center justify-center">
+                        <Package className="w-16 h-16 text-blue-400" />
+                      </div>
+                    );
+                  }
+                })()}
 
                 {/* Contenido */}
                 <div className="p-5">
