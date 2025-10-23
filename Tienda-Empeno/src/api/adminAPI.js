@@ -45,5 +45,29 @@ export const adminAPI = {
       console.error('Error al listar todas las compras:', error);
       throw error;
     }
+  },
+
+  // ========== TIENDA ==========
+
+  // Listar artículos para preparar (estado 9)
+  listarArticulosParaPreparar: async () => {
+    try {
+      const response = await apiService.get('/tienda/admin/articulos-preparar');
+      return response;
+    } catch (error) {
+      console.error('Error al listar artículos para preparar:', error);
+      throw error;
+    }
+  },
+
+  // Preparar producto para la tienda
+  prepararProductoParaTienda: async (productoData) => {
+    try {
+      const response = await apiService.post('/tienda/admin/preparar-producto', productoData);
+      return response;
+    } catch (error) {
+      console.error('Error al preparar producto para tienda:', error);
+      throw error;
+    }
   }
 };

@@ -17,6 +17,7 @@ import MisVentas from './pages/MisVentas';
 import PanelAdmin from './pages/admin/PanelAdmin';
 import ArticulosPrestamos from './pages/admin/ArticulosPrestamos';
 import ArticulosCompras from './pages/admin/ArticulosCompras';
+import ArticulosTienda from './pages/admin/ArticulosTienda';
 
 function App() {
   return (
@@ -112,6 +113,22 @@ function App() {
             element={
               <ProtectedRouteAdmin>
                 <ArticulosCompras />
+              </ProtectedRouteAdmin>
+            }
+          />
+          <Route
+            path="/admin/tienda"
+            element={
+              <ProtectedRouteAdmin>
+                <ArticulosTienda />
+              </ProtectedRouteAdmin>
+            }
+          />
+          <Route
+            path="/admin/panel"
+            element={
+              <ProtectedRouteAdmin>
+                <PanelAdmin />
               </ProtectedRouteAdmin>
             }
           />
