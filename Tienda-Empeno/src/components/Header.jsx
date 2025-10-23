@@ -1,18 +1,21 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Menu, X, LogIn, UserPlus, LogOut, Home as HomeIcon, Package, Settings, ArrowLeft, User, FileText, CreditCard, ShoppingBag } from 'lucide-react';
+import { Menu, X, LogIn, UserPlus, LogOut, Home as HomeIcon, Package, Settings, ArrowLeft, User, FileText, CreditCard, ShoppingBag, ShoppingCart, Store } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import { useCart } from '../context/CartContext';
 
 function Header() {
   const navigate = useNavigate();
   const location = useLocation();
   const { user, logout, isAuthenticated } = useAuth();
+  const { getCartCount, setIsCartOpen } = useCart();
   const [menuOpen, setMenuOpen] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const userMenuRef = useRef(null);
 
   const menuLinks = [
     { name: 'Inicio', icon: <HomeIcon className="h-5 w-5" />, path: '/' },
+    { name: 'Tienda', icon: <Store className="h-5 w-5" />, path: '/tienda' },
     { name: 'Contratos', icon: <FileText className="h-5 w-5" />, path: '/contratos', requireAuth: true },
     { name: 'Mis Préstamos', icon: <CreditCard className="h-5 w-5" />, path: '/prestamos', requireAuth: true },
     { name: 'Mis Ventas', icon: <ShoppingBag className="h-5 w-5" />, path: '/mis-ventas', requireAuth: true },
@@ -95,6 +98,20 @@ function Header() {
 
           {/* Lado derecho: Botones de autenticación */}
           <div className="flex items-center space-x-3">
+            {/* Botón del carrito - visible siempre */}
+            <button
+              onClick={() => setIsCartOpen(true)}
+              className="relative p-2 rounded-lg text-gray-600 hover:bg-purple-100 hover:text-purple-700 transition-all"
+              title="Ver carrito"
+            >
+              <ShoppingCart className="h-6 w-6" />
+              {getCartCount() > 0 && (
+                <span className="absolute -top-1 -right-1 bg-gradient-to-r from-purple-600 to-blue-600 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center shadow-lg animate-pulse">
+                  {getCartCount()}
+                </span>
+              )}
+            </button>
+
             {isAuthenticated() ? (
               <div className="relative" ref={userMenuRef}>
                 {/* Círculo con inicial del usuario y nombre debajo */}

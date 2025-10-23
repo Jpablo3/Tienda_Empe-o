@@ -1,8 +1,10 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
+import { CartProvider } from './context/CartContext';
 import ProtectedRoute from './components/ProtectedRoute';
 import ProtectedRouteAdmin from './components/ProtectedRouteAdmin';
 import InstallPWA from './components/InstallPWA';
+import FloatingCart from './components/FloatingCart';
 import Home from './pages/Home';
 import ClienteRegistro from './pages/ClienteRegistro';
 import Login from './pages/Login';
@@ -18,12 +20,17 @@ import PanelAdmin from './pages/admin/PanelAdmin';
 import ArticulosPrestamos from './pages/admin/ArticulosPrestamos';
 import ArticulosCompras from './pages/admin/ArticulosCompras';
 import ArticulosTienda from './pages/admin/ArticulosTienda';
+import TiendaCatalogo from './pages/TiendaCatalogo';
+import ProductoDetalle from './pages/ProductoDetalle';
+import Checkout from './pages/Checkout';
 
 function App() {
   return (
     <Router>
       <AuthProvider>
-        <Routes>
+        <CartProvider>
+          <FloatingCart />
+          <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/registro" element={<ClienteRegistro />} />
@@ -132,8 +139,20 @@ function App() {
               </ProtectedRouteAdmin>
             }
           />
-        </Routes>
-        <InstallPWA />
+          {/* Rutas de Tienda */}
+          <Route path="/tienda" element={<TiendaCatalogo />} />
+          <Route path="/tienda/producto/:id" element={<ProductoDetalle />} />
+          <Route
+            path="/tienda/checkout"
+            element={
+              <ProtectedRoute>
+                <Checkout />
+              </ProtectedRoute>
+            }
+          />
+          </Routes>
+          <InstallPWA />
+        </CartProvider>
       </AuthProvider>
     </Router>
   );

@@ -4,9 +4,9 @@ import { adminAPI } from '../api/adminAPI';
 
 const ModalPrepararProducto = ({ articulo, onClose, onSuccess }) => {
   const [formData, setFormData] = useState({
-    nombreEditado: articulo.nombreArticulo,
+    nombreEditado: articulo.nombreProducto,
     descripcionEditada: articulo.descripcion,
-    precioVentaTienda: articulo.precioArticulo
+    precioVentaTienda: articulo.precioVentaTienda
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -115,10 +115,12 @@ const ModalPrepararProducto = ({ articulo, onClose, onSuccess }) => {
                 <span className="text-gray-600">Tipo:</span>
                 <span className="font-medium text-gray-800">{articulo.tipoArticulo}</span>
               </div>
-              <div className="flex justify-between">
-                <span className="text-gray-600">Precio Original:</span>
-                <span className="font-bold text-emerald-600">{formatCurrency(articulo.precioArticulo)}</span>
-              </div>
+              {articulo.precioCompra && (
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Precio de Compra al Cliente:</span>
+                  <span className="font-bold text-blue-600">{formatCurrency(articulo.precioCompra)}</span>
+                </div>
+              )}
             </div>
           </div>
 

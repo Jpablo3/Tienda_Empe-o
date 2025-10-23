@@ -218,10 +218,10 @@ const ArticulosTienda = () => {
                   <div className="p-6">
                     <div className="flex items-start justify-between mb-3">
                       <h3 className="text-lg font-bold text-gray-800 line-clamp-2">
-                        {articulo.nombreArticulo}
+                        {articulo.nombreProducto}
                       </h3>
                       <span className="ml-2 px-3 py-1 bg-emerald-100 text-emerald-700 text-xs font-semibold rounded-full whitespace-nowrap">
-                        {articulo.estadoArticulo}
+                        {articulo.estadoFisico}
                       </span>
                     </div>
 
@@ -236,11 +236,21 @@ const ArticulosTienda = () => {
                         <span className="ml-2 font-medium text-gray-800">{articulo.tipoArticulo}</span>
                       </div>
 
+                      {articulo.precioCompra && (
+                        <div className="flex items-center text-sm">
+                          <DollarSign className="w-4 h-4 text-blue-600 mr-2" />
+                          <span className="text-gray-600">Compra al Cliente:</span>
+                          <span className="ml-2 font-bold text-blue-600">
+                            {formatCurrency(articulo.precioCompra)}
+                          </span>
+                        </div>
+                      )}
+
                       <div className="flex items-center text-sm">
                         <DollarSign className="w-4 h-4 text-emerald-600 mr-2" />
-                        <span className="text-gray-600">Precio actual:</span>
+                        <span className="text-gray-600">Precio Base:</span>
                         <span className="ml-2 font-bold text-emerald-600">
-                          {formatCurrency(articulo.precioArticulo)}
+                          {formatCurrency(articulo.precioVentaTienda)}
                         </span>
                       </div>
                     </div>

@@ -60,6 +60,29 @@ const apiService = {
 
   /**
    * ────────────────────────────────────────────────────────
+   * GET PUBLIC - Obtener datos sin autenticación
+   * ────────────────────────────────────────────────────────
+   * Usado para: Endpoints públicos que no requieren token
+   *
+   * @param {string} endpoint - Ruta del endpoint (ej: '/tienda/catalogo')
+   * @param {object} params - Parámetros de query
+   * @returns {Promise} - Los datos del servidor
+   */
+  getPublic: async (endpoint, params = {}) => {
+    try {
+      const response = await axiosInstance.get(endpoint, {
+        params,
+        headers: {} // Sin headers de autenticación
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Error en GET PUBLIC:', error);
+      throw error;
+    }
+  },
+
+  /**
+   * ────────────────────────────────────────────────────────
    * POST - Crear nuevos recursos en el servidor
    * ────────────────────────────────────────────────────────
    * Usado para: Crear registros, login, registro de usuarios
