@@ -202,14 +202,30 @@ const VenderArticulo = () => {
 
       const response = await compraArticulosAPI.registrarArticuloVender(articuloData);
 
-      if (response.success || response) {
+      console.log('=== EN VENDER ARTICULO ===');
+      console.log('Response recibido:', response);
+      console.log('Tiene mensaje?', !!response?.mensaje);
+      console.log('Tiene articulo?', !!response?.articulo);
+      console.log('Tiene error?', !!response?.error);
+
+      // Verificar si el backend devolvió un error
+      if (response && response.error) {
+        console.log('BRANCH: Error detectado');
+        setError(response.error);
+        setLoading(false);
+        return;
+      }
+
+      // El backend siempre devuelve un objeto con 'mensaje' y 'articulo' si es exitoso
+      if (response && (response.mensaje || response.articulo)) {
+        console.log('BRANCH: Éxito detectado');
         setError('');
         setLoading(false);
 
         // Mostrar mensaje de éxito en verde
         const successMsg = document.createElement('div');
         successMsg.className = 'fixed top-20 left-1/2 -translate-x-1/2 bg-green-500 text-white px-8 py-4 rounded-lg shadow-lg text-xl font-bold z-50 animate-bounce';
-        successMsg.textContent = '¡Artículo registrado para venta exitosamente!';
+        successMsg.textContent = response.mensaje || '¡Artículo registrado para venta exitosamente!';
         document.body.appendChild(successMsg);
 
         // Limpiar formulario
@@ -230,6 +246,11 @@ const VenderArticulo = () => {
         }, 3000);
         return;
       }
+
+      // Si llegamos aquí, la respuesta no tiene el formato esperado
+      console.log('BRANCH: Respuesta inesperada - no tiene mensaje ni articulo ni error');
+      setError('Respuesta inesperada del servidor. El artículo podría haberse registrado correctamente.');
+      setLoading(false);
     } catch (error) {
       console.error('Error al registrar artículo para venta:', error);
       if (error.response?.status === 401) {

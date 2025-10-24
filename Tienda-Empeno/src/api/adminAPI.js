@@ -69,5 +69,62 @@ export const adminAPI = {
       console.error('Error al preparar producto para tienda:', error);
       throw error;
     }
+  },
+
+  // ========== PROMOCIONES ==========
+
+  // Crear promoción
+  crearPromocion: async (promocionData) => {
+    try {
+      const response = await apiService.post('/promociones/crear', promocionData);
+      return response;
+    } catch (error) {
+      console.error('Error al crear promoción:', error);
+      throw error;
+    }
+  },
+
+  // Listar todas las promociones
+  listarTodasPromociones: async () => {
+    try {
+      const response = await apiService.get('/promociones/admin/todas');
+      return response;
+    } catch (error) {
+      console.error('Error al listar promociones:', error);
+      throw error;
+    }
+  },
+
+  // Actualizar promoción
+  actualizarPromocion: async (idPromocion, promocionData) => {
+    try {
+      const response = await apiService.put(`/promociones/${idPromocion}`, promocionData);
+      return response;
+    } catch (error) {
+      console.error('Error al actualizar promoción:', error);
+      throw error;
+    }
+  },
+
+  // Desactivar promoción
+  desactivarPromocion: async (idPromocion) => {
+    try {
+      const response = await apiService.put(`/promociones/${idPromocion}/desactivar`);
+      return response;
+    } catch (error) {
+      console.error('Error al desactivar promoción:', error);
+      throw error;
+    }
+  },
+
+  // Eliminar promoción
+  eliminarPromocion: async (idPromocion) => {
+    try {
+      const response = await apiService.delete(`/promociones/${idPromocion}`);
+      return response;
+    } catch (error) {
+      console.error('Error al eliminar promoción:', error);
+      throw error;
+    }
   }
 };

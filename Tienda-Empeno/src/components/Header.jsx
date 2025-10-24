@@ -18,6 +18,7 @@ function Header() {
     { name: 'Tienda', icon: <Store className="h-5 w-5" />, path: '/tienda' },
     { name: 'Contratos', icon: <FileText className="h-5 w-5" />, path: '/contratos', requireAuth: true },
     { name: 'Mis Préstamos', icon: <CreditCard className="h-5 w-5" />, path: '/prestamos', requireAuth: true },
+    { name: 'Mis Pedidos', icon: <Package className="h-5 w-5" />, path: '/tienda/mis-pedidos', requireAuth: true },
     { name: 'Mis Ventas', icon: <ShoppingBag className="h-5 w-5" />, path: '/mis-ventas', requireAuth: true },
     { name: 'Mis Artículos', icon: <Package className="h-5 w-5" />, path: '/articulos', requireAuth: true },
     { name: 'Configuración', icon: <Settings className="h-5 w-5" />, path: '/configuracion', requireAuth: true }
@@ -139,6 +140,16 @@ function Header() {
                     >
                       <User className="h-4 w-4 mr-3" />
                       Ver Perfil
+                    </button>
+                    <button
+                      onClick={() => {
+                        navigate('/tienda/mis-pedidos');
+                        setUserMenuOpen(false);
+                      }}
+                      className="w-full flex items-center px-4 py-2 text-gray-700 hover:bg-gradient-to-r hover:from-purple-50 hover:to-blue-50 hover:text-purple-700 transition-all"
+                    >
+                      <Package className="h-4 w-4 mr-3" />
+                      Mis Pedidos
                     </button>
                     <div className="border-t border-gray-200 my-1"></div>
                     <button

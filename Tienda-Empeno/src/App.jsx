@@ -20,9 +20,12 @@ import PanelAdmin from './pages/admin/PanelAdmin';
 import ArticulosPrestamos from './pages/admin/ArticulosPrestamos';
 import ArticulosCompras from './pages/admin/ArticulosCompras';
 import ArticulosTienda from './pages/admin/ArticulosTienda';
+import GestionPromociones from './pages/admin/GestionPromociones';
 import TiendaCatalogo from './pages/TiendaCatalogo';
 import ProductoDetalle from './pages/ProductoDetalle';
 import Checkout from './pages/Checkout';
+import MisPedidos from './pages/MisPedidos';
+import SeguimientoPedido from './pages/SeguimientoPedido';
 
 function App() {
   return (
@@ -139,6 +142,14 @@ function App() {
               </ProtectedRouteAdmin>
             }
           />
+          <Route
+            path="/admin/promociones"
+            element={
+              <ProtectedRouteAdmin>
+                <GestionPromociones />
+              </ProtectedRouteAdmin>
+            }
+          />
           {/* Rutas de Tienda */}
           <Route path="/tienda" element={<TiendaCatalogo />} />
           <Route path="/tienda/producto/:id" element={<ProductoDetalle />} />
@@ -147,6 +158,22 @@ function App() {
             element={
               <ProtectedRoute>
                 <Checkout />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/tienda/mis-pedidos"
+            element={
+              <ProtectedRoute>
+                <MisPedidos />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/tienda/pedido/:idPedido/seguimiento"
+            element={
+              <ProtectedRoute>
+                <SeguimientoPedido />
               </ProtectedRoute>
             }
           />

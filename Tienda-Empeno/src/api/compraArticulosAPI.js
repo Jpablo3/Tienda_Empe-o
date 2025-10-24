@@ -9,10 +9,17 @@ export const compraArticulosAPI = {
         throw new Error('No hay sesión activa. Por favor inicia sesión.');
       }
 
-      // Crear FormData para enviar archivos
+      // Crear FormData para enviar archivos Y datos
       const formData = new FormData();
 
-      // Agregar las imágenes primero
+      // Agregar los datos del artículo como campos del FormData
+      formData.append('idTipoArticulo', articuloData.idTipoArticulo.toString());
+      formData.append('nombreArticulo', articuloData.nombreArticulo);
+      formData.append('descripcion', articuloData.descripcion);
+      formData.append('estadoArticulo', articuloData.estadoArticulo.toString());
+      formData.append('precioArticulo', articuloData.precioArticulo.toString());
+
+      // Agregar las imágenes
       if (articuloData.imagenes && articuloData.imagenes.length > 0) {
         articuloData.imagenes.forEach((imagen) => {
           formData.append('imagenes', imagen);
@@ -29,18 +36,9 @@ export const compraArticulosAPI = {
         cantidadImagenes: articuloData.imagenes?.length || 0
       });
 
-      // Construir URL con query params
-      const params = new URLSearchParams({
-        idTipoArticulo: articuloData.idTipoArticulo.toString(),
-        nombreArticulo: articuloData.nombreArticulo,
-        descripcion: articuloData.descripcion,
-        estadoArticulo: articuloData.estadoArticulo.toString(),
-        precioArticulo: articuloData.precioArticulo.toString()
-      });
-
-      // Enviar FormData con params en la URL
+      // Enviar FormData (sin params en la URL, todo va en el FormData)
       const response = await apiService.post(
-        `/compras/registrar-articulo-vender?${params.toString()}`,
+        `/compras/registrar-articulo-vender`,
         formData,
         {
           headers: {
@@ -48,6 +46,14 @@ export const compraArticulosAPI = {
           }
         }
       );
+
+      console.log('=== RESPUESTA DEL BACKEND ===');
+      console.log('Response completo:', response);
+      console.log('Response.mensaje:', response?.mensaje);
+      console.log('Response.articulo:', response?.articulo);
+      console.log('Response.error:', response?.error);
+      console.log('Tipo de response:', typeof response);
+      console.log('Keys de response:', response ? Object.keys(response) : 'null');
 
       return response;
     } catch (error) {

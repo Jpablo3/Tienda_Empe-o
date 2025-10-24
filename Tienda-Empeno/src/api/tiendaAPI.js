@@ -71,6 +71,17 @@ export const tiendaAPI = {
     }
   },
 
+  // Ver detalle de un pedido
+  verDetallePedido: async (idPedido) => {
+    try {
+      const response = await apiService.get(`/tienda/pedido/${idPedido}`);
+      return response;
+    } catch (error) {
+      console.error('Error al obtener detalle del pedido:', error);
+      throw error;
+    }
+  },
+
   // Ver seguimiento de pedido
   verSeguimientoPedido: async (idPedido) => {
     try {

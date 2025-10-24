@@ -243,6 +243,11 @@ const TiendaCatalogo = () => {
               const indexActual = imagenesActuales[producto.idProductoTienda] || 0;
               const enCarrito = isInCart(producto.idProductoTienda);
 
+              // Verificar si tiene promoción activa
+              const tienePromocion = producto.promocionActiva && producto.precioOriginal && producto.precioConDescuento;
+              const descuento = tienePromocion ? producto.precioOriginal - producto.precioConDescuento : 0;
+              const porcentajeDescuento = tienePromocion ? Math.round((descuento / producto.precioOriginal) * 100) : 0;
+
               return (
                 <div
                   key={producto.idProductoTienda}
@@ -260,10 +265,19 @@ const TiendaCatalogo = () => {
                       loading="lazy"
                     />
 
-                    {/* Badge único */}
-                    <div className="absolute top-2 left-2 bg-gradient-to-r from-purple-600 to-blue-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg">
-                      ¡ÚNICO!
-                    </div>
+                    {/* Badge de descuento (si tiene promoción) */}
+                    {tienePromocion ? (
+                      <div className="absolute top-2 left-2 bg-gradient-to-r from-red-600 to-orange-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg animate-pulse">
+                        {producto.promocionActiva.tipoDescuento === 'PORCENTAJE'
+                          ? `-${porcentajeDescuento}%`
+                          : `-${formatCurrency(descuento)}`
+                        }
+                      </div>
+                    ) : (
+                      <div className="absolute top-2 left-2 bg-gradient-to-r from-purple-600 to-blue-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg">
+                        ¡ÚNICO!
+                      </div>
+                    )}
 
                     {/* Indicadores de carrusel */}
                     {imagenesValidas.length > 1 && (
@@ -314,10 +328,32 @@ const TiendaCatalogo = () => {
                     </div>
 
                     <div className="flex items-center justify-between">
-                      <div>
-                        <p className="text-2xl font-bold text-purple-600">
-                          {formatCurrency(producto.precioVentaTienda)}
-                        </p>
+                      <div className="flex-1">
+                        {tienePromocion ? (
+                          <div>
+                            {/* Precio original tachado */}
+                            <p className="text-sm text-gray-400 line-through">
+                              {formatCurrency(producto.precioOriginal)}
+                            </p>
+                            {/* Precio con descuento */}
+                            <div className="flex items-center gap-2">
+                              <p className="text-2xl font-bold text-red-600">
+                                {formatCurrency(producto.precioConDescuento)}
+                              </p>
+                              <span className="text-xs font-bold text-red-600 bg-red-100 px-2 py-1 rounded">
+                                ¡OFERTA!
+                              </span>
+                            </div>
+                            {/* Ahorro */}
+                            <p className="text-xs text-emerald-600 font-semibold">
+                              Ahorras {formatCurrency(descuento)}
+                            </p>
+                          </div>
+                        ) : (
+                          <p className="text-2xl font-bold text-purple-600">
+                            {formatCurrency(producto.precioVentaTienda)}
+                          </p>
+                        )}
                       </div>
 
                       <button

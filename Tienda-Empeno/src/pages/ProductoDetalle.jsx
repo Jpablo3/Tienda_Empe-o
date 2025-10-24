@@ -127,6 +127,11 @@ const ProductoDetalle = () => {
   const imagenesValidas = obtenerImagenesValidas();
   const enCarrito = isInCart(producto.idProductoTienda);
 
+  // Verificar si tiene promoción activa
+  const tienePromocion = producto.promocionActiva && producto.precioOriginal && producto.precioConDescuento;
+  const descuento = tienePromocion ? producto.precioOriginal - producto.precioConDescuento : 0;
+  const porcentajeDescuento = tienePromocion ? Math.round((descuento / producto.precioOriginal) * 100) : 0;
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-purple-50 to-blue-50">
       <Header />
@@ -152,10 +157,19 @@ const ProductoDetalle = () => {
                 className="w-full h-full object-cover"
               />
 
-              {/* Badge único */}
-              <div className="absolute top-4 left-4 bg-gradient-to-r from-purple-600 to-blue-600 text-white text-sm font-bold px-4 py-2 rounded-full shadow-lg">
-                ¡ARTÍCULO ÚNICO!
-              </div>
+              {/* Badge de descuento o único */}
+              {tienePromocion ? (
+                <div className="absolute top-4 left-4 bg-gradient-to-r from-red-600 to-orange-600 text-white text-sm font-bold px-4 py-2 rounded-full shadow-lg animate-pulse">
+                  {producto.promocionActiva.tipoDescuento === 'PORCENTAJE'
+                    ? `-${porcentajeDescuento}% DESCUENTO`
+                    : `-${formatCurrency(descuento)} DESCUENTO`
+                  }
+                </div>
+              ) : (
+                <div className="absolute top-4 left-4 bg-gradient-to-r from-purple-600 to-blue-600 text-white text-sm font-bold px-4 py-2 rounded-full shadow-lg">
+                  ¡ARTÍCULO ÚNICO!
+                </div>
+              )}
             </div>
 
             {/* Thumbnails */}
@@ -206,12 +220,49 @@ const ProductoDetalle = () => {
 
             {/* Precio */}
             <div className="mb-6">
-              <p className="text-4xl font-bold text-purple-600">
-                {formatCurrency(producto.precioVentaTienda)}
-              </p>
-              <p className="text-sm text-gray-600 mt-1">
-                Artículo único - Solo disponible 1 unidad
-              </p>
+              {tienePromocion ? (
+                <div>
+                  {/* Nombre de la promoción */}
+                  <div className="mb-3 p-3 bg-gradient-to-r from-red-50 to-orange-50 border-l-4 border-red-500 rounded-lg">
+                    <p className="text-sm font-bold text-red-700 flex items-center">
+                      <Tag className="w-4 h-4 mr-2" />
+                      {producto.promocionActiva.nombrePromocion}
+                    </p>
+                    {producto.promocionActiva.descripcion && (
+                      <p className="text-xs text-red-600 mt-1">{producto.promocionActiva.descripcion}</p>
+                    )}
+                  </div>
+
+                  {/* Precio original tachado */}
+                  <p className="text-xl text-gray-400 line-through mb-2">
+                    {formatCurrency(producto.precioOriginal)}
+                  </p>
+
+                  {/* Precio con descuento */}
+                  <div className="flex items-center gap-3 mb-2">
+                    <p className="text-4xl font-bold text-red-600">
+                      {formatCurrency(producto.precioConDescuento)}
+                    </p>
+                    <span className="text-lg font-bold text-red-600 bg-red-100 px-3 py-1 rounded-full">
+                      -{porcentajeDescuento}%
+                    </span>
+                  </div>
+
+                  {/* Ahorro */}
+                  <p className="text-lg text-emerald-600 font-bold">
+                    ¡Ahorras {formatCurrency(descuento)}!
+                  </p>
+                </div>
+              ) : (
+                <div>
+                  <p className="text-4xl font-bold text-purple-600">
+                    {formatCurrency(producto.precioVentaTienda)}
+                  </p>
+                  <p className="text-sm text-gray-600 mt-1">
+                    Artículo único - Solo disponible 1 unidad
+                  </p>
+                </div>
+              )}
             </div>
 
             {/* Estado físico */}
