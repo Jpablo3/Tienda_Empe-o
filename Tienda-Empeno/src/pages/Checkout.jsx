@@ -5,6 +5,7 @@ import Header from '../components/Header';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
 import { tiendaAPI } from '../api/tiendaAPI';
+import { clienteAPI } from '../api/clienteAPI';
 
 const Checkout = () => {
   const navigate = useNavigate();
@@ -46,34 +47,31 @@ const Checkout = () => {
       return;
     }
 
-    // Cargar datos del cliente desde localStorage o API
+    // Cargar datos del cliente desde el backend
     const cargarDatosCliente = async () => {
       try {
-        const userEmail = localStorage.getItem('userEmail') || '';
-        const userName = localStorage.getItem('userName') || '';
-        const userPhone = localStorage.getItem('userPhone') || '';
-        const userAddress = localStorage.getItem('userAddress') || '';
-        const userCity = localStorage.getItem('userCity') || '';
-        const userDepartment = localStorage.getItem('userDepartment') || '';
-        const userPostalCode = localStorage.getItem('userPostalCode') || '';
+        // Obtener perfil completo del cliente
+        const perfil = await clienteAPI.obtenerPerfil();
 
-        // Pre-llenar dirección si hay datos guardados
-        if (userAddress || userCity || userDepartment) {
+        console.log('Perfil del cliente cargado:', perfil);
+
+        // Pre-llenar nombre del titular con el nombre completo del cliente
+        const nombreCompleto = `${perfil.nombreCliente} ${perfil.apellidoCliente}`.toUpperCase();
+        setDatosTarjeta(prev => ({ ...prev, nombreTitular: nombreCompleto }));
+
+        // Pre-llenar dirección si el cliente tiene una registrada
+        if (perfil.direccion) {
           setDireccion({
-            direccion: userAddress,
-            ciudad: userCity,
-            departamento: userDepartment,
-            codigoPostal: userPostalCode,
-            telefono: userPhone
+            direccion: perfil.direccion.direccionCliente || '',
+            ciudad: perfil.direccion.nombreCiudad || '',
+            departamento: perfil.direccion.nombreDepartamento || '',
+            codigoPostal: perfil.direccion.codigoPostal || '',
+            telefono: perfil.telefonoCliente || ''
           });
-        }
-
-        // Pre-llenar nombre del titular con el nombre del usuario
-        if (userName) {
-          setDatosTarjeta(prev => ({ ...prev, nombreTitular: userName.toUpperCase() }));
         }
       } catch (error) {
         console.error('Error al cargar datos del cliente:', error);
+        // Si falla, los campos quedan vacíos pero editables
       }
     };
 
@@ -102,6 +100,10 @@ const Checkout = () => {
     }
     if (!direccion.telefono.trim()) {
       setError('El teléfono es requerido');
+      return false;
+    }
+    if (direccion.telefono.length !== 8) {
+      setError('El teléfono debe tener exactamente 8 dígitos');
       return false;
     }
     return true;
@@ -347,14 +349,18 @@ const Checkout = () => {
 
                     <div>
                       <label className="block text-sm font-semibold text-gray-700 mb-2">
-                        Teléfono *
+                        Teléfono * (8 dígitos)
                       </label>
                       <input
                         type="tel"
                         value={direccion.telefono}
-                        onChange={(e) => setDireccion({ ...direccion, telefono: e.target.value })}
+                        onChange={(e) => {
+                          const value = e.target.value.replace(/\D/g, '').slice(0, 8);
+                          setDireccion({ ...direccion, telefono: value });
+                        }}
                         className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-purple-500 focus:ring-2 focus:ring-purple-200 transition-all outline-none"
-                        placeholder="1234-5678"
+                        placeholder="12345678"
+                        maxLength="8"
                       />
                     </div>
                   </div>

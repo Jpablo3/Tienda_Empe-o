@@ -61,7 +61,7 @@ const Perfil = () => {
         const data = {
           nombre: response?.nombreCliente || '',
           apellido: response?.apellidoCliente || '',
-          telefono: response?.telefono || '',
+          telefono: response?.telefonoCliente || '',
           email: response?.emailCliente || user.userEmail || '',
           numeroDocumento: response?.numeroDocumento || '',
           tipoDocumento: response?.tipoDocumento || '',

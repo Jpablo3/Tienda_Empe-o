@@ -76,6 +76,20 @@ export const clienteAPI = {
     }
   },
 
+  // Obtener perfil completo del cliente autenticado
+  obtenerPerfil: async () => {
+    try {
+      const userId = localStorage.getItem('userId');
+      if (!userId) {
+        throw new Error('No hay sesión activa');
+      }
+      return await apiService.get(`/clientes/${userId}`);
+    } catch (error) {
+      console.error('Error al obtener perfil:', error);
+      throw error;
+    }
+  },
+
   // Actualizar cliente
   actualizarCliente: async (id, clienteData) => {
     try {

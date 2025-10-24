@@ -346,6 +346,7 @@ const ClienteRegistroForm = () => {
         nombreCliente: clienteData.nombre.trim(),
         apellidoCliente: clienteData.apellido.trim(),
         emailCliente: clienteData.email.trim().toLowerCase(),
+        telefonoCliente: clienteData.telefono.trim(),
         contraseña: clienteData.password,
         idDireccion: direccionResponse.idDireccion
       };

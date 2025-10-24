@@ -20,11 +20,11 @@ const FloatingCart = () => {
       {/* Overlay */}
       <div
         onClick={() => setIsCartOpen(false)}
-        className="fixed inset-0 bg-black/50 z-40 backdrop-blur-sm animate-fade-in"
+        className="fixed inset-0 bg-black/50 z-[60] backdrop-blur-sm animate-fade-in"
       />
 
       {/* Drawer del carrito */}
-      <div className="fixed right-0 top-0 h-full w-full md:w-96 bg-white shadow-2xl z-50 transform transition-transform duration-300 ease-out animate-slide-in-right">
+      <div className="fixed right-0 top-0 h-full w-full md:w-96 bg-white shadow-2xl z-[70] transform transition-transform duration-300 ease-out animate-slide-in-right">
         {/* Header */}
         <div className="bg-gradient-to-r from-purple-600 to-blue-600 text-white p-6">
           <div className="flex items-center justify-between">
