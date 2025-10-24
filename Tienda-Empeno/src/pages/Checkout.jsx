@@ -25,8 +25,8 @@ const Checkout = () => {
     telefono: ''
   });
 
-  // Datos de pago
-  const [metodoPago, setMetodoPago] = useState('tarjeta'); // 'tarjeta' o 'efectivo'
+  // Datos de pago - SOLO TARJETA
+  const [metodoPago, setMetodoPago] = useState('tarjeta');
   const [datosTarjeta, setDatosTarjeta] = useState({
     numeroTarjeta: '',
     nombreTitular: '',
@@ -34,6 +34,7 @@ const Checkout = () => {
     cvv: ''
   });
 
+  // Cargar datos del cliente automáticamente
   useEffect(() => {
     if (!isAuthenticated()) {
       navigate('/login');
@@ -42,7 +43,41 @@ const Checkout = () => {
 
     if (cart.length === 0) {
       navigate('/tienda');
+      return;
     }
+
+    // Cargar datos del cliente desde localStorage o API
+    const cargarDatosCliente = async () => {
+      try {
+        const userEmail = localStorage.getItem('userEmail') || '';
+        const userName = localStorage.getItem('userName') || '';
+        const userPhone = localStorage.getItem('userPhone') || '';
+        const userAddress = localStorage.getItem('userAddress') || '';
+        const userCity = localStorage.getItem('userCity') || '';
+        const userDepartment = localStorage.getItem('userDepartment') || '';
+        const userPostalCode = localStorage.getItem('userPostalCode') || '';
+
+        // Pre-llenar dirección si hay datos guardados
+        if (userAddress || userCity || userDepartment) {
+          setDireccion({
+            direccion: userAddress,
+            ciudad: userCity,
+            departamento: userDepartment,
+            codigoPostal: userPostalCode,
+            telefono: userPhone
+          });
+        }
+
+        // Pre-llenar nombre del titular con el nombre del usuario
+        if (userName) {
+          setDatosTarjeta(prev => ({ ...prev, nombreTitular: userName.toUpperCase() }));
+        }
+      } catch (error) {
+        console.error('Error al cargar datos del cliente:', error);
+      }
+    };
+
+    cargarDatosCliente();
   }, [cart, isAuthenticated, navigate]);
 
   const formatCurrency = (value) => {
@@ -128,17 +163,15 @@ const Checkout = () => {
       const pedidoResponse = await tiendaAPI.crearPedido(pedidoData);
       setPedidoCreado(pedidoResponse.pedido);
 
-      // Pagar pedido
+      // Pagar pedido - Siempre con tarjeta (idMetodoPago = 1)
       const pagoData = {
         idPedido: pedidoResponse.pedido.idPedido,
         idDireccion: 1,
-        idMetodoPago: metodoPago === 'tarjeta' ? 1 : 2,
-        ...(metodoPago === 'tarjeta' && {
-          numeroTarjeta: datosTarjeta.numeroTarjeta.replace(/\s/g, ''),
-          nombreTitular: datosTarjeta.nombreTitular,
-          fechaExpiracion: datosTarjeta.fechaExpiracion,
-          cvv: datosTarjeta.cvv
-        })
+        idMetodoPago: 1, // Tarjeta de crédito/débito
+        numeroTarjeta: datosTarjeta.numeroTarjeta.replace(/\s/g, ''),
+        nombreTitular: datosTarjeta.nombreTitular,
+        fechaExpiracion: datosTarjeta.fechaExpiracion,
+        cvv: datosTarjeta.cvv
       };
 
       const pagoResponse = await tiendaAPI.pagarPedido(pagoData);
@@ -341,40 +374,19 @@ const Checkout = () => {
               <div className="bg-white rounded-2xl shadow-lg p-6">
                 <h2 className="text-xl font-bold text-gray-800 mb-6">Método de Pago</h2>
 
-                {/* Selector de método */}
-                <div className="grid grid-cols-2 gap-4 mb-6">
-                  <button
-                    onClick={() => setMetodoPago('tarjeta')}
-                    className={`p-4 rounded-xl border-2 transition-all ${
-                      metodoPago === 'tarjeta'
-                        ? 'border-purple-600 bg-purple-50'
-                        : 'border-gray-200 hover:border-purple-300'
-                    }`}
-                  >
-                    <CreditCard className={`w-8 h-8 mx-auto mb-2 ${metodoPago === 'tarjeta' ? 'text-purple-600' : 'text-gray-400'}`} />
-                    <p className={`font-semibold ${metodoPago === 'tarjeta' ? 'text-purple-600' : 'text-gray-600'}`}>
-                      Tarjeta
-                    </p>
-                  </button>
-
-                  <button
-                    onClick={() => setMetodoPago('efectivo')}
-                    className={`p-4 rounded-xl border-2 transition-all ${
-                      metodoPago === 'efectivo'
-                        ? 'border-purple-600 bg-purple-50'
-                        : 'border-gray-200 hover:border-purple-300'
-                    }`}
-                  >
-                    <Check className={`w-8 h-8 mx-auto mb-2 ${metodoPago === 'efectivo' ? 'text-purple-600' : 'text-gray-400'}`} />
-                    <p className={`font-semibold ${metodoPago === 'efectivo' ? 'text-purple-600' : 'text-gray-600'}`}>
-                      Efectivo
-                    </p>
-                  </button>
+                {/* Solo método de pago con tarjeta */}
+                <div className="mb-6 p-4 bg-gradient-to-r from-purple-50 to-blue-50 rounded-xl border-2 border-purple-200">
+                  <div className="flex items-center justify-center">
+                    <CreditCard className="w-8 h-8 text-purple-600 mr-3" />
+                    <div>
+                      <p className="font-bold text-purple-900">Pago con Tarjeta de Crédito/Débito</p>
+                      <p className="text-sm text-purple-700">Método de pago seguro y verificado</p>
+                    </div>
+                  </div>
                 </div>
 
-                {/* Formulario de tarjeta */}
-                {metodoPago === 'tarjeta' && (
-                  <div className="space-y-4">
+                {/* Formulario de tarjeta - Siempre visible */}
+                <div className="space-y-4">
                     <div>
                       <label className="block text-sm font-semibold text-gray-700 mb-2">
                         Número de Tarjeta *
@@ -441,15 +453,6 @@ const Checkout = () => {
                       </div>
                     </div>
                   </div>
-                )}
-
-                {metodoPago === 'efectivo' && (
-                  <div className="p-4 bg-blue-50 border border-blue-200 rounded-xl">
-                    <p className="text-sm text-blue-800">
-                      <strong>Pago en Efectivo:</strong> El pago se confirmará cuando el producto sea entregado en tu dirección.
-                    </p>
-                  </div>
-                )}
 
                 <div className="flex gap-4 mt-6">
                   <button
@@ -493,7 +496,10 @@ const Checkout = () => {
                     Método de Pago
                   </h3>
                   <p className="text-sm text-gray-600">
-                    {metodoPago === 'tarjeta' ? `Tarjeta terminada en ${datosTarjeta.numeroTarjeta.slice(-4)}` : 'Pago en Efectivo'}
+                    Tarjeta de Crédito/Débito terminada en {datosTarjeta.numeroTarjeta.slice(-4)}
+                  </p>
+                  <p className="text-xs text-gray-500 mt-1">
+                    {datosTarjeta.nombreTitular}
                   </p>
                 </div>
 

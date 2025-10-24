@@ -161,7 +161,10 @@ const PagarPrestamo = () => {
     );
   }
 
-  const cuotaMensual = prestamo.montoPrestamo * (1 + (prestamo.tasaInteres * prestamo.plazoMeses / 100)) / prestamo.plazoMeses;
+  // Usar la cuota mensual calculada por el backend con redondeo correcto
+  // Si no viene del backend, calcular como fallback
+  const cuotaMensual = prestamo.cuotaMensual ||
+    (prestamo.saldoAdeudado || prestamo.montoPrestamo) / prestamo.plazoMeses;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-100">

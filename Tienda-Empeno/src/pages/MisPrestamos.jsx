@@ -152,7 +152,9 @@ const MisPrestamos = () => {
             {prestamos.map((prestamo) => {
               const diasRestantes = calcularDiasRestantes(prestamo.fechaVencimiento);
               const estadoPago = getEstadoPago(diasRestantes);
-              const cuotaMensual = prestamo.montoPrestamo * (1 + (prestamo.tasaInteres * prestamo.plazoMeses / 100)) / prestamo.plazoMeses;
+              // Usar la cuota mensual del backend con redondeo correcto
+              const cuotaMensual = prestamo.cuotaMensual ||
+                (prestamo.saldoAdeudado || prestamo.montoPrestamo) / prestamo.plazoMeses;
 
               return (
                 <div

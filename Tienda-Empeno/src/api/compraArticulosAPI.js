@@ -47,14 +47,6 @@ export const compraArticulosAPI = {
         }
       );
 
-      console.log('=== RESPUESTA DEL BACKEND ===');
-      console.log('Response completo:', response);
-      console.log('Response.mensaje:', response?.mensaje);
-      console.log('Response.articulo:', response?.articulo);
-      console.log('Response.error:', response?.error);
-      console.log('Tipo de response:', typeof response);
-      console.log('Keys de response:', response ? Object.keys(response) : 'null');
-
       return response;
     } catch (error) {
       console.error('Error completo al registrar artículo para venta:', error);

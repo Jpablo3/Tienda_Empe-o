@@ -7,6 +7,7 @@ import {
 import Header from '../components/Header';
 import ModalFirmaTexto from '../components/ModalFirmaTexto';
 import { contratosAPI } from '../api/contratosAPI';
+import { descargarContratoPDF } from '../utils/generadorContratoPDF';
 
 const DetalleContrato = () => {
   const { id } = useParams();
@@ -72,6 +73,26 @@ const DetalleContrato = () => {
       month: 'long',
       day: 'numeric'
     });
+  };
+
+  const handleDescargarPDF = () => {
+    if (!contrato) return;
+
+    // Preparar datos para el PDF
+    const datosContrato = {
+      nombreCliente: contrato.nombreCliente,
+      dpi: contrato.dpiCliente || '0000000000000', // Si no hay DPI, usar valor por defecto
+      nombreArticulo: contrato.nombreArticulo,
+      montoPrestamo: contrato.montoPrestamo,
+      tasaInteres: contrato.tasaInteres,
+      plazoMeses: contrato.plazoMeses,
+      fechaInicio: contrato.fechaInicio,
+      fechaVencimiento: contrato.fechaVencimiento,
+      saldoAdeudado: contrato.saldoAdeudado
+    };
+
+    // Generar y descargar el PDF
+    descargarContratoPDF(datosContrato);
   };
 
   if (loading) {
@@ -245,29 +266,25 @@ const DetalleContrato = () => {
                 </div>
               </div>
 
-              {/* Documento del contrato */}
-              {contrato.documentoContrato && (
-                <div className="bg-blue-50 border-2 border-blue-200 rounded-xl p-6 mb-6">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-3">
-                      <FileText className="w-8 h-8 text-blue-600" />
-                      <div>
-                        <h3 className="font-bold text-gray-800">Documento del Contrato</h3>
-                        <p className="text-sm text-gray-600">Descarga y revisa el contrato completo</p>
-                      </div>
+              {/* Documento del contrato - Generación de PDF */}
+              <div className="bg-blue-50 border-2 border-blue-200 rounded-xl p-6 mb-6">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-3">
+                    <FileText className="w-8 h-8 text-blue-600" />
+                    <div>
+                      <h3 className="font-bold text-gray-800">Documento del Contrato</h3>
+                      <p className="text-sm text-gray-600">Descarga el contrato con términos y políticas de la tienda</p>
                     </div>
-                    <a
-                      href={contrato.documentoContrato}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl font-semibold transition-all flex items-center space-x-2"
-                    >
-                      <Download className="w-5 h-5" />
-                      <span>Descargar PDF</span>
-                    </a>
                   </div>
+                  <button
+                    onClick={handleDescargarPDF}
+                    className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl font-semibold transition-all flex items-center space-x-2 shadow-md hover:shadow-lg"
+                  >
+                    <Download className="w-5 h-5" />
+                    <span>Descargar PDF</span>
+                  </button>
                 </div>
-              )}
+              </div>
 
               {/* Botón de firma */}
               {contrato.estado === 'Pendiente' && (

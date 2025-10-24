@@ -202,15 +202,8 @@ const VenderArticulo = () => {
 
       const response = await compraArticulosAPI.registrarArticuloVender(articuloData);
 
-      console.log('=== EN VENDER ARTICULO ===');
-      console.log('Response recibido:', response);
-      console.log('Tiene mensaje?', !!response?.mensaje);
-      console.log('Tiene articulo?', !!response?.articulo);
-      console.log('Tiene error?', !!response?.error);
-
       // Verificar si el backend devolvió un error
       if (response && response.error) {
-        console.log('BRANCH: Error detectado');
         setError(response.error);
         setLoading(false);
         return;
@@ -218,7 +211,6 @@ const VenderArticulo = () => {
 
       // El backend siempre devuelve un objeto con 'mensaje' y 'articulo' si es exitoso
       if (response && (response.mensaje || response.articulo)) {
-        console.log('BRANCH: Éxito detectado');
         setError('');
         setLoading(false);
 
@@ -248,7 +240,6 @@ const VenderArticulo = () => {
       }
 
       // Si llegamos aquí, la respuesta no tiene el formato esperado
-      console.log('BRANCH: Respuesta inesperada - no tiene mensaje ni articulo ni error');
       setError('Respuesta inesperada del servidor. El artículo podría haberse registrado correctamente.');
       setLoading(false);
     } catch (error) {

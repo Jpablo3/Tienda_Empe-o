@@ -24,7 +24,12 @@ const Perfil = () => {
     telefono: '',
     email: '',
     numeroDocumento: '',
-    tipoDocumento: ''
+    tipoDocumento: '',
+    direccion: '',
+    ciudad: '',
+    departamento: '',
+    pais: '',
+    codigoPostal: ''
   });
 
   // Datos originales para comparar cambios
@@ -51,14 +56,20 @@ const Perfil = () => {
       try {
         setLoading(true);
         const response = await clienteAPI.getClientePorId(user.userId);
+        const direccion = response?.direccion || {};
 
         const data = {
-          nombre: response.nombreCliente || '',
-          apellido: response.apellidoCliente || '',
-          telefono: response.telefono || '',
-          email: response.emailCliente || user.userEmail || '',
-          numeroDocumento: response.numeroDocumento || '',
-          tipoDocumento: response.tipoDocumento?.nombre || ''
+          nombre: response?.nombreCliente || '',
+          apellido: response?.apellidoCliente || '',
+          telefono: response?.telefono || '',
+          email: response?.emailCliente || user.userEmail || '',
+          numeroDocumento: response?.numeroDocumento || '',
+          tipoDocumento: response?.tipoDocumento || '',
+          direccion: direccion?.direccionCliente || '',
+          ciudad: direccion?.nombreCiudad || '',
+          departamento: direccion?.nombreDepartamento || '',
+          pais: direccion?.nombrePais || '',
+          codigoPostal: direccion?.codigoPostal || ''
         };
 
         setUserData(data);
@@ -206,6 +217,17 @@ const Perfil = () => {
     </div>
   );
 
+  const InfoRow = ({ label, value }) => (
+    <div className="flex flex-col space-y-1">
+      <span className="text-sm font-medium text-gray-500">{label}</span>
+      <span className="text-base font-semibold text-gray-800">
+        {value ? value : 'No registrado'}
+      </span>
+    </div>
+  );
+
+  const nombreCompleto = [userData.nombre, userData.apellido].filter(Boolean).join(' ').trim();
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-100">
       <Header />
@@ -272,78 +294,106 @@ const Perfil = () => {
                     <div className="flex justify-center py-12">
                       <div className="animate-spin rounded-full h-12 w-12 border-4 border-purple-600 border-t-transparent"></div>
                     </div>
-                  ) : (
-                    <div className="space-y-5">
-                      {/* Nombre Completo */}
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                          Nombre Completo
-                        </label>
-                        <input
-                          type="text"
-                          value={`${userData.nombre} ${userData.apellido}`}
-                          onChange={(e) => {
-                            const nombres = e.target.value.split(' ');
-                            handleChange('nombre', nombres[0] || '');
-                            handleChange('apellido', nombres.slice(1).join(' ') || '');
-                          }}
-                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
-                          placeholder="Juan Pérez"
-                        />
+                                    ) : (
+                    <div className="space-y-8">
+                      <div className="bg-gray-50 border border-gray-200 rounded-xl p-6">
+                        <h3 className="text-lg font-semibold text-gray-900 mb-4">Resumen del cliente</h3>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <InfoRow label="Nombre completo" value={nombreCompleto || null} />
+                          <InfoRow label="Correo" value={userData.email || null} />
+                          <InfoRow label="Tipo de documento" value={userData.tipoDocumento || null} />
+                          <InfoRow label="Número de documento" value={userData.numeroDocumento || null} />
+                          <InfoRow label="Teléfono" value={userData.telefono || null} />
+                        </div>
                       </div>
 
-                      {/* Correo Electrónico */}
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                          Correo Electrónico
-                        </label>
-                        <input
-                          type="email"
-                          value={userData.email}
-                          onChange={(e) => handleChange('email', e.target.value)}
-                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
-                          placeholder="juan@example.com"
-                        />
+                      <div className="bg-gray-50 border border-gray-200 rounded-xl p-6">
+                        <h3 className="text-lg font-semibold text-gray-900 mb-4">Dirección y ubicación</h3>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <InfoRow label="Dirección" value={userData.direccion || null} />
+                          <InfoRow label="Ciudad" value={userData.ciudad || null} />
+                          <InfoRow label="Departamento" value={userData.departamento || null} />
+                          <InfoRow label="País" value={userData.pais || null} />
+                          <InfoRow label="Código postal" value={userData.codigoPostal || null} />
+                        </div>
                       </div>
 
-                      {/* Teléfono */}
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                          Teléfono
-                        </label>
-                        <input
-                          type="tel"
-                          value={userData.telefono}
-                          onChange={(e) => handleChange('telefono', e.target.value.replace(/[^0-9]/g, '').substring(0, 8))}
-                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
-                          placeholder="+1234567890"
-                          maxLength={8}
-                        />
-                      </div>
+                      <div className="pt-4 border-t border-gray-200">
+                        <h3 className="text-lg font-semibold text-gray-900 mb-4">Actualizar datos de contacto</h3>
+                        <div className="space-y-5">
+                          {/* Nombre Completo */}
+                          <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                              Nombre Completo
+                            </label>
+                            <input
+                              type="text"
+                              value={nombreCompleto}
+                              onChange={(e) => {
+                                const partes = e.target.value.split(' ').filter(Boolean);
+                                handleChange('nombre', partes[0] || '');
+                                handleChange('apellido', partes.slice(1).join(' ') || '');
+                              }}
+                              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+                              placeholder="Juan Pérez"
+                            />
+                          </div>
 
-                      {/* Documento de Identidad */}
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                          Documento de Identidad
-                        </label>
-                        <input
-                          type="text"
-                          value={userData.numeroDocumento}
-                          readOnly
-                          className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-50 cursor-not-allowed"
-                          placeholder="12345678A"
-                        />
-                        <p className="text-xs text-gray-500 mt-1">El número de documento no se puede modificar</p>
-                      </div>
+                          {/* Correo Electrónico */}
+                          <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                              Correo Electrónico
+                            </label>
+                            <input
+                              type="email"
+                              value={userData.email}
+                              onChange={(e) => handleChange('email', e.target.value)}
+                              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+                              placeholder="juan@example.com"
+                            />
+                          </div>
 
-                      {/* Botón Guardar */}
-                      <button
-                        onClick={handleSavePersonalInfo}
-                        disabled={!hasChanges() || loading}
-                        className="w-full bg-gradient-to-r from-purple-600 to-blue-600 text-white py-3 px-6 rounded-lg hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed font-semibold"
-                      >
-                        Guardar Cambios
-                      </button>
+                          {/* Teléfono */}
+                          <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                              Teléfono
+                            </label>
+                            <input
+                              type="tel"
+                              value={userData.telefono}
+                              onChange={(e) => handleChange('telefono', e.target.value.replace(/[^0-9]/g, '').substring(0, 8))}
+                              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+                              placeholder="12345678"
+                              maxLength={8}
+                            />
+                            <p className="text-xs text-gray-500 mt-1">Solo números, máximo 8 dígitos</p>
+                          </div>
+
+                          {/* Documento de Identidad */}
+                          <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                              Documento de Identidad
+                            </label>
+                            <input
+                              type="text"
+                              value={userData.numeroDocumento}
+                              readOnly
+                              className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-50 cursor-not-allowed"
+                              placeholder="12345678A"
+                            />
+                            <p className="text-xs text-gray-500 mt-1">El número de documento no se puede modificar</p>
+                          </div>
+
+                          {/* Botón Guardar */}
+                          <button
+                            onClick={handleSavePersonalInfo}
+                            disabled={!hasChanges() || loading}
+                            className="w-full bg-gradient-to-r from-purple-600 to-blue-600 text-white py-3 px-6 rounded-lg hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed font-semibold"
+                          >
+                            Guardar Cambios
+                          </button>
+                        </div>
+                      </div>
                     </div>
                   )}
                 </div>
