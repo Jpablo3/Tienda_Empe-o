@@ -187,34 +187,34 @@ const EmpenarArticulo = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-purple-800 to-blue-900">
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-100">
       {/* Header */}
       <Header />
 
       <div className="max-w-4xl mx-auto py-8 px-4">
-        <h1 className="text-4xl font-bold text-white text-center mb-8">
+        <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent text-center mb-8">
           Empeñar Artículo
         </h1>
 
         {/* Mensaje de error */}
         {error && (
-          <div className="bg-red-500/20 border border-red-500 text-white px-4 py-3 rounded-lg mb-6">
+          <div className="bg-red-50 border-l-4 border-red-500 text-red-800 px-4 py-3 rounded-lg mb-6">
             {error}
           </div>
         )}
 
         {loadingTipos ? (
-          <div className="text-white text-center py-8">
+          <div className="text-gray-700 text-center py-8">
             <p className="text-xl">Cargando tipos de artículos...</p>
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Tipo de Artículo */}
-            <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20">
-              <h2 className="text-2xl font-bold text-white mb-4">Tipo de Artículo</h2>
+            <div className="bg-white rounded-2xl p-6 shadow-xl border border-gray-200">
+              <h2 className="text-2xl font-bold text-gray-800 mb-4">Tipo de Artículo</h2>
               <div className="space-y-3">
                 {tiposArticulo.length === 0 ? (
-                  <p className="text-white">No hay tipos de artículos disponibles</p>
+                  <p className="text-gray-500">No hay tipos de artículos disponibles</p>
                 ) : (
                   tiposArticulo.map(tipo => (
                     <label key={tipo.idTipoArticulo} className="flex items-center space-x-3 cursor-pointer group">
@@ -226,7 +226,7 @@ const EmpenarArticulo = () => {
                         onChange={handleChange}
                         className="w-5 h-5 text-purple-600 focus:ring-purple-500"
                       />
-                      <span className="text-white text-lg group-hover:text-purple-300 transition-colors">
+                      <span className="text-gray-700 text-lg group-hover:text-purple-600 transition-colors font-medium">
                         {tipo.nombreTipoArticulo}
                       </span>
                     </label>
@@ -236,8 +236,8 @@ const EmpenarArticulo = () => {
             </div>
 
           {/* Estado del Artículo */}
-          <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20">
-            <h2 className="text-2xl font-bold text-white mb-4">Estado del Artículo</h2>
+          <div className="bg-white rounded-2xl p-6 shadow-xl border border-gray-200">
+            <h2 className="text-2xl font-bold text-gray-800 mb-4">Estado del Artículo</h2>
             <div className="space-y-4">
               <div className="relative pt-8">
                 <input
@@ -266,7 +266,7 @@ const EmpenarArticulo = () => {
                   {formData.estadoArticulo}
                 </div>
               </div>
-              <div className="flex justify-between text-white text-sm mt-8">
+              <div className="flex justify-between text-gray-600 text-sm mt-8 font-medium">
                 <span>Malo (1)</span>
                 <span>Excelente (10)</span>
               </div>
@@ -274,53 +274,53 @@ const EmpenarArticulo = () => {
           </div>
 
           {/* Detalles */}
-          <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20">
-            <h2 className="text-2xl font-bold text-white mb-4">Detalles</h2>
+          <div className="bg-white rounded-2xl p-6 shadow-xl border border-gray-200">
+            <h2 className="text-2xl font-bold text-gray-800 mb-4">Detalles</h2>
             <div className="space-y-4">
               <div>
-                <label className="block text-white mb-2">Nombre</label>
+                <label className="block text-gray-700 font-medium mb-2">Nombre</label>
                 <input
                   type="text"
                   name="nombre"
                   value={formData.nombre}
                   onChange={handleChange}
                   placeholder="Ej: iPhone 12"
-                  className="w-full px-4 py-3 bg-white/20 border border-white/30 rounded-lg text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl text-gray-800 placeholder-gray-400 focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-200 transition-all"
                 />
               </div>
               <div>
-                <label className="block text-white mb-2">Descripción</label>
+                <label className="block text-gray-700 font-medium mb-2">Descripción</label>
                 <textarea
                   name="descripcion"
                   value={formData.descripcion}
                   onChange={handleChange}
                   placeholder="Describe detalles..."
                   rows="4"
-                  className="w-full px-4 py-3 bg-white/20 border border-white/30 rounded-lg text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500 resize-none"
+                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl text-gray-800 placeholder-gray-400 focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-200 transition-all resize-none"
                 />
               </div>
             </div>
           </div>
 
           {/* Precio e Imágenes */}
-          <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20">
-            <h2 className="text-2xl font-bold text-white mb-4">Precio e Imágenes</h2>
+          <div className="bg-white rounded-2xl p-6 shadow-xl border border-gray-200">
+            <h2 className="text-2xl font-bold text-gray-800 mb-4">Precio e Imágenes</h2>
             <div className="space-y-4">
               <div>
-                <label className="block text-white mb-2">Precio Solicitado</label>
+                <label className="block text-gray-700 font-medium mb-2">Precio Solicitado</label>
                 <input
                   type="number"
                   name="precioSolicitado"
                   value={formData.precioSolicitado}
                   onChange={handleChange}
                   placeholder="Ej: 500"
-                  className="w-full px-4 py-3 bg-white/20 border border-white/30 rounded-lg text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl text-gray-800 placeholder-gray-400 focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-200 transition-all"
                 />
               </div>
 
               <div>
-                <label className="block text-white mb-2">Imágenes (mínimo 3)</label>
-                <div className="border-2 border-dashed border-purple-400 rounded-lg p-6 text-center bg-white/5">
+                <label className="block text-gray-700 font-medium mb-2">Imágenes (mínimo 3)</label>
+                <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center bg-gray-50 hover:border-purple-400 hover:bg-purple-50 transition-all">
                   <input
                     type="file"
                     accept="image/*"
@@ -330,8 +330,8 @@ const EmpenarArticulo = () => {
                     id="imageInput"
                   />
                   <label htmlFor="imageInput" className="cursor-pointer">
-                    <Upload className="w-12 h-12 text-purple-300 mx-auto mb-2" />
-                    <p className="text-white text-sm">
+                    <Upload className="w-12 h-12 text-purple-500 mx-auto mb-2" />
+                    <p className="text-gray-600 text-sm">
                       Arrastra y suelta imágenes aquí o haz clic para seleccionar (mínimo 3)
                     </p>
                   </label>
@@ -343,7 +343,7 @@ const EmpenarArticulo = () => {
                           <img
                             src={img}
                             alt={`Preview ${index + 1}`}
-                            className="w-full h-20 object-cover rounded-lg"
+                            className="w-full h-20 object-cover rounded-lg border-2 border-gray-200"
                           />
                           <button
                             type="button"
@@ -360,7 +360,7 @@ const EmpenarArticulo = () => {
                   <button
                     type="button"
                     onClick={() => document.getElementById('imageInput').click()}
-                    className="mt-4 bg-gradient-to-r from-purple-600 to-blue-600 text-white px-6 py-2 rounded-lg hover:from-purple-700 hover:to-blue-700 transition-all"
+                    className="mt-4 bg-gradient-to-r from-purple-600 to-blue-600 text-white px-6 py-2 rounded-lg hover:from-purple-700 hover:to-blue-700 transition-all shadow-md hover:shadow-lg"
                   >
                     Seleccionar Imágenes
                   </button>

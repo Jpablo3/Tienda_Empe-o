@@ -111,11 +111,11 @@ export const clienteAPI = {
   },
 
   // Cambiar contraseña
-  cambiarContraseña: async (idCliente, contraseñaActual, contraseñaNueva) => {
+  cambiarContrasenia: async (idCliente, contraseniaActual, contraseniaNueva) => {
     try {
       return await apiService.put(`/clientes/${idCliente}/cambiar-contraseña`, {
-        contraseñaActual,
-        contraseñaNueva
+        contraseniaActual,
+        contraseniaNueva
       });
     } catch (error) {
       console.error('Error al cambiar contraseña:', error);

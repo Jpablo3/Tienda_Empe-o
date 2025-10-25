@@ -292,12 +292,11 @@ const SeguimientoPedido = () => {
                       )}
                       <div className="flex-1">
                         <h3 className="font-semibold text-gray-800">{item.nombreProducto}</h3>
-                        {item.descripcion && (
-                          <p className="text-sm text-gray-600 mt-1 line-clamp-2">{item.descripcion}</p>
-                        )}
                         <div className="flex items-center justify-between mt-2">
                           <span className="text-sm text-gray-500">Cantidad: {item.cantidad || 1}</span>
-                          <span className="font-bold text-purple-600">{formatearPrecio(item.precio)}</span>
+                          {item.precio && !isNaN(item.precio) && (
+                            <span className="font-bold text-purple-600">{formatearPrecio(item.precio)}</span>
+                          )}
                         </div>
                         {/* Botón de valorar (solo si el pedido está entregado) */}
                         {pedido.idEstado === 24 && (
@@ -352,17 +351,6 @@ const SeguimientoPedido = () => {
                     </div>
                   </div>
                 </div>
-              </div>
-
-              {/* Ayuda */}
-              <div className="bg-gradient-to-br from-purple-100 to-blue-100 rounded-2xl shadow-lg p-6 border-2 border-purple-200">
-                <h3 className="font-bold text-gray-800 mb-2">¿Necesitas Ayuda?</h3>
-                <p className="text-sm text-gray-700 mb-4">
-                  Si tienes alguna pregunta sobre tu pedido, contáctanos.
-                </p>
-                <button className="w-full px-4 py-2 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-lg font-semibold hover:shadow-lg transform hover:scale-105 transition-all">
-                  Contactar Soporte
-                </button>
               </div>
             </div>
           </div>

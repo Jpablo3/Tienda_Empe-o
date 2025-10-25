@@ -174,8 +174,8 @@ const Perfil = () => {
     try {
       setLoading(true);
 
-      // Llamar al endpoint para cambiar la contraseña
-      await clienteAPI.cambiarContraseña(
+      // Llamar al endpoint para cambiar la contrasenia
+      await clienteAPI.cambiarContrasenia(
         user.userId,
         passwordData.currentPassword,
         passwordData.newPassword
@@ -188,7 +188,7 @@ const Perfil = () => {
         confirmNewPassword: ''
       });
     } catch (err) {
-      console.error('Error al cambiar contraseña:', err);
+      console.error('Error al cambiar contrasenia:', err);
       setError(err.response?.data?.message || 'Error al cambiar la contraseña. Verifica tu contraseña actual.');
     } finally {
       setLoading(false);

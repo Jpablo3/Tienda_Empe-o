@@ -124,7 +124,20 @@ const PagarPrestamo = () => {
 
       const response = await pagosAPI.pagarEnEfectivo(parseInt(id));
 
-      setSuccess(`¡Solicitud exitosa! Se ha programado la visita del cobrador para el ${response.fechaVisita}. Monto a pagar: Q${response.montoPagar}`);
+      // Formatear fecha de visita
+      const fechaFormateada = response.fechaDeVisita
+        ? new Date(response.fechaDeVisita).toLocaleDateString('es-GT', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+          })
+        : 'fecha no disponible';
+
+      const montoFormateado = response.monto
+        ? parseFloat(response.monto).toLocaleString('es-GT', { minimumFractionDigits: 2 })
+        : '0.00';
+
+      setSuccess(`¡Solicitud exitosa! Se ha programado la visita del cobrador para el ${fechaFormateada}. Monto a pagar: Q${montoFormateado}`);
 
       setTimeout(() => {
         navigate('/prestamos');
@@ -161,10 +174,9 @@ const PagarPrestamo = () => {
     );
   }
 
-  // Usar la cuota mensual calculada por el backend con redondeo correcto
-  // Si no viene del backend, calcular como fallback
-  const cuotaMensual = prestamo.cuotaMensual ||
-    (prestamo.saldoAdeudado || prestamo.montoPrestamo) / prestamo.plazoMeses;
+  // Usar la cuota mensual calculada por el backend
+  // El backend ya calcula correctamente la cuota fija basada en el monto total inicial
+  const cuotaMensual = prestamo.cuotaMensual || 0;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-100">
