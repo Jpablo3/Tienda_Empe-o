@@ -108,6 +108,19 @@ export const clienteAPI = {
       console.error('Error al obtener clientes:', error);
       throw error;
     }
+  },
+
+  // Cambiar contraseña
+  cambiarContraseña: async (idCliente, contraseñaActual, contraseñaNueva) => {
+    try {
+      return await apiService.put(`/clientes/${idCliente}/cambiar-contraseña`, {
+        contraseñaActual,
+        contraseñaNueva
+      });
+    } catch (error) {
+      console.error('Error al cambiar contraseña:', error);
+      throw error;
+    }
   }
 };
 

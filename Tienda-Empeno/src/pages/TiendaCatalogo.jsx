@@ -15,6 +15,7 @@ const TiendaCatalogo = () => {
   const [error, setError] = useState('');
   const [busqueda, setBusqueda] = useState('');
   const [filtroTipo, setFiltroTipo] = useState('todos');
+  const [filtroPromocion, setFiltroPromocion] = useState('todos');
   const [orden, setOrden] = useState('recientes');
   const [imagenesActuales, setImagenesActuales] = useState({});
 
@@ -43,7 +44,7 @@ const TiendaCatalogo = () => {
 
   useEffect(() => {
     aplicarFiltrosYOrden();
-  }, [productos, busqueda, filtroTipo, orden]);
+  }, [productos, busqueda, filtroTipo, filtroPromocion, orden]);
 
   const cargarCatalogo = async () => {
     try {
@@ -87,6 +88,17 @@ const TiendaCatalogo = () => {
     // Filtro por tipo
     if (filtroTipo !== 'todos') {
       resultado = resultado.filter(p => p.tipoArticulo === filtroTipo);
+    }
+
+    // Filtro por promoción
+    if (filtroPromocion === 'con-promocion') {
+      resultado = resultado.filter(p =>
+        p.promocionActiva && p.precioOriginal && p.precioConDescuento
+      );
+    } else if (filtroPromocion === 'sin-promocion') {
+      resultado = resultado.filter(p =>
+        !p.promocionActiva || !p.precioOriginal || !p.precioConDescuento
+      );
     }
 
     // Ordenar
@@ -199,6 +211,20 @@ const TiendaCatalogo = () => {
               </select>
             </div>
 
+            {/* Filtro por promoción */}
+            <div className="relative">
+              <Tag className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+              <select
+                value={filtroPromocion}
+                onChange={(e) => setFiltroPromocion(e.target.value)}
+                className="pl-10 pr-8 py-3 border-2 border-gray-200 rounded-xl focus:border-purple-500 focus:ring-2 focus:ring-purple-200 transition-all outline-none appearance-none bg-white"
+              >
+                <option value="todos">Todos los productos</option>
+                <option value="con-promocion">Con promoción</option>
+                <option value="sin-promocion">Sin promoción</option>
+              </select>
+            </div>
+
             {/* Ordenar */}
             <select
               value={orden}
@@ -213,8 +239,18 @@ const TiendaCatalogo = () => {
           </div>
 
           {/* Resultados */}
-          <div className="mt-4 text-sm text-gray-600">
-            Mostrando <span className="font-semibold text-purple-600">{productosFiltrados.length}</span> productos
+          <div className="mt-4 flex flex-wrap items-center gap-4 text-sm">
+            <div className="text-gray-600">
+              Mostrando <span className="font-semibold text-purple-600">{productosFiltrados.length}</span> productos
+            </div>
+            {filtroPromocion === 'todos' && (
+              <div className="flex items-center gap-2 bg-gradient-to-r from-red-50 to-orange-50 px-3 py-1.5 rounded-full border border-red-200">
+                <Tag className="w-4 h-4 text-red-600" />
+                <span className="text-red-700 font-medium">
+                  {productosFiltrados.filter(p => p.promocionActiva && p.precioOriginal && p.precioConDescuento).length} con promoción
+                </span>
+              </div>
+            )}
           </div>
         </div>
 

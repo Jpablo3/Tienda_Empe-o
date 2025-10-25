@@ -174,9 +174,12 @@ const Perfil = () => {
     try {
       setLoading(true);
 
-      // Aquí llamarías al endpoint para cambiar la contraseña
-      // Por ahora simulamos el cambio
-      console.log('Cambiando contraseña...');
+      // Llamar al endpoint para cambiar la contraseña
+      await clienteAPI.cambiarContraseña(
+        user.userId,
+        passwordData.currentPassword,
+        passwordData.newPassword
+      );
 
       setSuccess('Contraseña actualizada correctamente');
       setPasswordData({
